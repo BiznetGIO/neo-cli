@@ -2,6 +2,7 @@ import os
 import time
 import socket
 import tempfile
+import subprocess
 from .base import Base
 from neo.libs import vm as vm_lib
 from neo.libs import utils
@@ -11,7 +12,7 @@ from neo.libs import orchestration as orch
 class Attach(Base):
     """
 usage:
-        attach [-f PATH] [-c COMMAND]
+        attach [-f PATH] [-c COMMAND] [-t HOST]
         attach ssh <USER@HOSTS>
         attach vm <VM_ID>
 
@@ -22,6 +23,7 @@ Options:
 -h --help                             Print usage
 -f PATH --file=PATH                   Set neo manifest file
 -k KEY_FILE --key=KEY_FILE            Setup keyfile to ssh service
+-t HOST --tunneling=HOST              SSH Tunneling (eg. -t 8001:127.0.0.1:8001)
 
 Commands:
   vm <VM_ID>                          Attach to Virtual Machine
@@ -184,10 +186,17 @@ Run 'neo attach COMMAND --help' for more information on a command.
                         time.sleep(3)
                         do_ssh = True
 
-                if not self.args["--command"]:
-                    utils.ssh_shell(project_hostname, project_user, key_file=private_key_file)
-                else:
+                if self.args["--command"]:
                     try:
                         utils.ssh_out_stream(project_hostname, project_user, self.args["--command"], key_file=private_key_file)
                     except KeyboardInterrupt:
                         exit()
+
+                if self.args["--tunneling"]:
+                    try:
+                        tunnel_args = " ".join(["-L {}".format(t_arg) for t_arg in self.args["--tunneling"].split(",")])
+                        commands = "ssh -i {} {} {}@{}".format(private_key_file, tunnel_args, project_user, project_hostname).split(" ")
+                        subprocess.call(commands)
+                    except KeyboardInterrupt:
+                        exit()
+                utils.ssh_shell(project_hostname, project_user, key_file=private_key_file)

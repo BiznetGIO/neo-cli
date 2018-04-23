@@ -3,6 +3,34 @@
 $ neo create kubernetes
 ```
 
+## Dashboard
+
+### Tunneling
+```bash
+$ neo attach -t 8001:127.0.0.1:8001
+[k8s@k8s-test-controller-2hojdpb5a22a ~]$ kube-token
+Name:         admin-user-token-qt8dr
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name=admin-user
+              kubernetes.io/service-account.uid=1dc769a0-4679-11e8-829f-fa163ebedac7
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1090 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLXF0OGRyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIxZGM3NjlhMC00Njc5LTExZTgtODI5Zi1mYTE2M2ViZWRhYzciLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.XdWFIA49ckETvBSEA
+
+[k8s@k8s-test-controller-2hojdpb5a22a ~]$ kubectl proxy
+Starting to serve on 127.0.0.1:8001
+```
+
+open url http://127.0.0.1:8001 and then login with your token access
+
+![k8s-tunnel](img/k8s-tunnel.gif)
+
 ## Create simple user
 In this guide, we will find out how to create a new user using Service Account mechanism of Kubernetes, grant this user admin permissions and log in to Dashboard using bearer token tied to this user.
 
