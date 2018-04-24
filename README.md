@@ -17,6 +17,7 @@ pip3 install -U neo-cli
 ## Links
 
 - [Documentation](docs/index.md)
+- [Presentation](http://speakerdeck.com/u/anak10thn)
 
 
 ## Contributors
