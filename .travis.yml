@@ -11,3 +11,10 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_214af5c02543_key -iv $encrypted_214af5c02543_iv
   -in tests/.test.env.enc -out tests/.test.env -d
 - mv tests/.test.env $HOME/.neo.env
+deploy:
+  provider: pypi
+  user: Your username
+  password:
+    secure: cM/KHHNbMXkrEcQkEARt7bpgPEHLB/nQIcmXKQTsygQ+twwu4wMS2c7sc0+vfSQqDUByhKE/WH7oPP47ddQlX2HUCitKdFAHzEW7vr9pRmlxsnGxeVW2dtesCUfJzutLk3Og5sRqWB5klmW0qGZcG9996NfDjuDLZ9ar94FD5ciCp5775gceUiopSsEDUZ9w9UKYPlWP+VomD0fNOYSqbRc3uZ1e9N/kVe+bNIx3MPclrdZWDprV1F4bA0eSYm3wpKlV56OniG6K6Q9qXUUN8WdAa1cv4dx4jftnbBiWuq0+THHfSGqFZ531EKFCy73Q0VPdn2yXqRgPxdqevDUPF55H6wRwZG/2qTD0dc8FtH7exGRxu74zO3d0koCajGSOgzgzDJDzoFJFTan6opsTkS7J2VcprSVzR10bVYJTwTD5hZ+QSenTyfH3iOzcM7tOQ1SMMGLrjckoQ9QXvMv0nRLbnCsc3ov6EP2lAKfvi6PGzqsW+mufiCSyrzSYOxCPYJD491kWpVAoMVUFzA0UdtvBvBul3InLMSpoGSDuw24pqvptjZKO7cweurzfbUp5d7jmM4Ns0FP5taMSSusMZzPAljfluXVrvRuaV9cabSuA7r37Il5fNA82YQP8J9goJWGGX33ySS7rxLa8KLXaTt6iJ4ByRSy1erdXbmVM66o=
+  on:
+    tags: true
