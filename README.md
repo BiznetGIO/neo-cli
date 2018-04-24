@@ -1,4 +1,4 @@
-# NEO CLI
+# NEO CLI [![Gitter](https://badges.gitter.im/BiznetGIO/neo-cli.svg)](https://gitter.im/BiznetGIO/neo-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/BiznetGIO/neo-cli.svg?branch=master)](https://travis-ci.org/BiznetGIO/neo-cli)
 
 NEO CLI is agnostic orchestration tools for openstack
 
