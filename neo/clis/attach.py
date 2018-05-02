@@ -191,12 +191,15 @@ Run 'neo attach COMMAND --help' for more information on a command.
                         utils.ssh_out_stream(project_hostname, project_user, self.args["--command"], key_file=private_key_file)
                     except KeyboardInterrupt:
                         exit()
-
-                if self.args["--tunneling"]:
+                elif self.args["--tunneling"]:
                     try:
                         tunnel_args = " ".join(["-L {}".format(t_arg) for t_arg in self.args["--tunneling"].split(",")])
                         commands = "ssh -i {} {} {}@{}".format(private_key_file, tunnel_args, project_user, project_hostname).split(" ")
                         subprocess.call(commands)
                     except KeyboardInterrupt:
                         exit()
-                utils.ssh_shell(project_hostname, project_user, key_file=private_key_file)
+                else:
+                    try:
+                        utils.ssh_shell(project_hostname, project_user, key_file=private_key_file)
+                    except KeyboardInterrupt:
+                        exit()
