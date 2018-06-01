@@ -106,7 +106,10 @@ def do_logout():
     if check_env():
         with open("{}/.neo.env".format(home)) as envfile:
             os.remove("{}/.neo.env".format(home))
-            utils.log_info("Logout Success")
+
+    if check_session():
+        os.remove('/tmp/session.pkl')
+        utils.log_info("Logout Success")
 
 
 def set_session(sess):
