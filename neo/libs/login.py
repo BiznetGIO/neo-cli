@@ -20,6 +20,18 @@ def get_password():
     return getpass.getpass("password: ")
 
 
+def generate_session(auth_url, username, password, **kwargs):
+    auth = v3.Password(
+        auth_url=auth_url,
+        username=username,
+        password=password,
+        **kwargs)
+
+    sess = session.Session(auth=auth)
+
+    return sess
+
+
 def check_env():
     return os.path.isfile("{}/.neo.env".format(home))
 
@@ -52,47 +64,35 @@ def load_env_file():
 
 
 def get_project_id(username, password):
-    auth = v3.Password(
+    sess = generate_session(
         auth_url=auth_url,
         username=username,
         password=password,
         user_domain_name=user_domain_name)
-    sess = session.Session(auth=auth)
     keystone = client.Client(session=sess)
     project_list = [
         t.id for t in keystone.projects.list(user=sess.get_user_id())
     ]
 
-    return create_env_file(username, password, project_list[0])
+    return project_list[0]
 
 
 def do_login():
     try:
-        if check_env():
-            load_env_file()
-        else:
-            username = get_username()
-            password = get_password()
-            get_project_id(username, password)
-            load_env_file()
+        username = get_username()
+        password = get_password()
+        project_id = get_project_id(username, password)
 
-        auth = v3.Password(
-            auth_url=os.environ.get("OS_AUTH_URL"),
-            username=os.environ.get("OS_USERNAME"),
-            password=os.environ.get("OS_PASSWORD"),
-            user_domain_name=os.environ.get("OS_USER_DOMAIN_NAME"),
-            project_id=os.environ.get("OS_PROJECT_ID"),
+        sess = generate_session(
+            auth_url=auth_url,
+            username=username,
+            password=password,
+            user_domain_name=user_domain_name,
+            project_id=project_id,
             reauthenticate=True,
             include_catalog=True)
 
-        sess = session.Session(auth=auth)
         set_session(sess)
-
-        with open("{}/.neo.env".format(home)) as envfile:
-            if not 'OS_TOKEN' in envfile.read():
-                token = sess.get_token()
-                add_token(token)
-                load_env_file()
 
         utils.log_info("Login Success")
         return True
@@ -103,10 +103,6 @@ def do_login():
 
 
 def do_logout():
-    if check_env():
-        with open("{}/.neo.env".format(home)) as envfile:
-            os.remove("{}/.neo.env".format(home))
-
     if check_session():
         os.remove('/tmp/session.pkl')
         utils.log_info("Logout Success")
