@@ -2,6 +2,9 @@
 
 all: build upload clean
 
+test:
+			pytest --cov=neo --cov-report=term-missing
+
 build:
 			rm -rf dist
 			python setup.py sdist
