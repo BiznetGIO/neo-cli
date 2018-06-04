@@ -10,6 +10,7 @@ class TestLogin(TestCase):
     @patch("getpass.getpass")
     @patch("builtins.input")
     def test_do_login(self, input, getpass):
+        login.load_env_file()
         input.return_value = os.environ.get('OS_USERNAME')
         getpass.return_value = os.environ.get('OS_PASSWORD')
         output = login.do_login()
