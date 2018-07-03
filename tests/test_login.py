@@ -10,8 +10,9 @@ class TestLogin:
         login.load_env_file()
         username = os.environ.get('OS_USERNAME')
         passwd = os.environ.get('OS_PASSWORD')
-
+        # give value to input() prompt
         monkeypatch.setattr('builtins.input', lambda x: username)
         monkeypatch.setattr('getpass.getpass', lambda x: passwd)
+        # return True is login succeed
         output = login.do_login()
         assert output == True
