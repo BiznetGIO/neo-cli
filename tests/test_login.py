@@ -1,17 +1,17 @@
-"""Tests for our `neo hello` subcommand."""
+"""Tests for our `neo login` subcommand."""
+
+import pytest
 import os
-from subprocess import PIPE, Popen as popen
-from unittest import TestCase
-from unittest.mock import patch
 from neo.libs import login
 
 
-class TestLogin(TestCase):
-    @patch("getpass.getpass")
-    @patch("builtins.input")
-    def test_do_login(self, input, getpass):
+class TestLogin:
+    def test_login(self, monkeypatch):
         login.load_env_file()
-        input.return_value = os.environ.get('OS_USERNAME')
-        getpass.return_value = os.environ.get('OS_PASSWORD')
+        username = os.environ.get('OS_USERNAME')
+        passwd = os.environ.get('OS_PASSWORD')
+
+        monkeypatch.setattr('builtins.input', lambda x: username)
+        monkeypatch.setattr('getpass.getpass', lambda x: passwd)
         output = login.do_login()
-        self.assertTrue(output)
+        assert output == True
