@@ -19,5 +19,6 @@ class TestLogin:
 
     def test_do_logout(self):
         login.do_logout()
+        # session removed if logout succeed
         output = login.check_session()
         assert output == False
