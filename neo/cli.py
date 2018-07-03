@@ -4,6 +4,7 @@ Usage:
 
 Options:
       --config string                    Location of client config
+  -h, --help                             display this help and exit
   -v, --version                          Print version information and quit
 
 Commands:
