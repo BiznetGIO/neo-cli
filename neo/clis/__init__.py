@@ -5,4 +5,4 @@ from .ls import *
 from .create import *
 from .update import *
 from .rm import *
-from .exec import *
+from .attach import *

@@ -8,13 +8,13 @@ Options:
   -v, --version                          Print version information and quit
 
 Commands:
+  attach      Attach local standard input, output, and error streams to a running machine
+  create      Deploying neo stack
   login       Log in to a NEO Cloud
   logout      Log out from a NEO Cloud
-  create      Deploying neo stack
   ls          List all stack, network, machine
   rm          Delete stack, network, machine
   update      Update neo stack
-  exec        Remote your machine
 
 Run 'neo COMMAND --help' for more information on a command.
 """

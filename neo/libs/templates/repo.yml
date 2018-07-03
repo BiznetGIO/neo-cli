@@ -36,6 +36,11 @@ clusters:
         type: number
         label: Worker size
         description: Number of instances in cluster.
+      private_network:
+        type: string
+        label: Private Network
+        description: Setup Private network
+        dependences: "repo:networks.private"
 
 networks:
   private:

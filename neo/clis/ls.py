@@ -11,7 +11,7 @@ from tabulate import tabulate
 class Ls(Base):
     """
 usage:
-        ls [-f PATH]
+        ls [-f PATH] [-o STACK_NAME]
         ls stack
         ls vm
         ls network
@@ -19,8 +19,9 @@ usage:
 List all stack
 
 Options:
--h --help               Print usage
--f PATH --file=PATH     Set neo manifest file
+-h --help                             Print usage
+-f PATH --file=PATH                   Set neo manifest file
+-o STACK_NAME --outputs=STACK_NAME    Print outputs from stack name
 
 Commands:
  stack                  List all Stacks
@@ -97,6 +98,17 @@ Run 'neo ls COMMAND --help' for more information on a command.
                     data_network,
                     headers=["ID", "Name", "Status"],
                     tablefmt="grid"))
+            exit()
+
+        if self.args["--outputs"]:
+            stack_name = self.args["--outputs"].split(".")
+            if len(stack_name) is 1:
+                for meta in orch.get_meta_stack(stack_name[0]):
+                    print(meta["output_key"], " :")
+                    print(meta["output_value"])
+                    print("")
+            if len(stack_name) is 2:
+                print(orch.get_metadata(stack_name[0], stack_name[1]))
             exit()
 
         if set_file:

@@ -6,9 +6,11 @@ import os
 import time
 
 
-def get_heat_client():
+def get_heat_client(session=None):
     try:
-        heat = heat_client.Client('1', session=login_lib.get_session())
+        if not session:
+            session = login_lib.get_session()
+        heat = heat_client.Client('1', session=session)
         return heat
     except Exception as e:
         utils.log_err(e)
@@ -86,9 +88,9 @@ def check_manifest_file():
     return neo_file
 
 
-def do_create(initialize):
+def do_create(initialize, session=None):
     try:
-        heat = get_heat_client()
+        heat = get_heat_client(session)
         for deploy in initialize:
             deploy_init_file = "{}/init.yml".format(deploy["dir"])
             deploy_file = utils.yaml_parser(deploy_init_file)["create"]
@@ -111,23 +113,24 @@ def do_create(initialize):
                     files=files)
             if (len(initialize) > 0):
                 time.sleep(8)
-            if deploy["stack"] == "clusters":
-                utils.log_info("Generate {} private key...".format(
-                    deploy["project"]))
-                wait_key = True
-                while wait_key:
-                    out = get_private_key(
-                        deploy["project"])["output"]["output_value"]
-                    if out:
-                        private_key_file = "{}/private_key.pem".format(
-                            deploy["dir"])
-                        with open(private_key_file, "w") as pkey:
-                            pkey.write(out)
-                            os.chmod(private_key_file, 0o600)
-                            utils.log_info("Done...")
-                        wait_key = False
-                    else:
-                        time.sleep(5)
+            # if deploy["stack"] == "clusters":
+            #     utils.log_info("Generate {} private key...".format(
+            #         deploy["project"]))
+            #     wait_key = True
+            #     private_key_file = None
+            #     while wait_key:
+            #         out = get_pkey_from_stack(
+            #             deploy["project"])
+            #         if out:
+            #             private_key_file = "{}/private_key.pem".format(
+            #                 deploy["dir"])
+            #             with open(private_key_file, "w") as pkey:
+            #                 pkey.write(out)
+            #                 os.chmod(private_key_file, 0o600)
+            #                 utils.log_info("Done...")
+            #             wait_key = False
+            #         else:
+            #             time.sleep(5)
 
     except Exception as e:
         utils.log_err(e)
@@ -137,9 +140,9 @@ def do_create(initialize):
         pass
 
 
-def do_update(initialize):
+def do_update(initialize, session=None):
     try:
-        heat = get_heat_client()
+        heat = get_heat_client(session)
         for deploy in initialize:
             deploy_init_file = "{}/init.yml".format(deploy["dir"])
             deploy_file = utils.yaml_parser(deploy_init_file)["update"]
@@ -186,8 +189,8 @@ def do_update(initialize):
         pass
 
 
-def get_list():
-    heat = get_heat_client()
+def get_list(session=None):
+    heat = get_heat_client(session)
     stacks = heat.stacks.list()
     data_stack = [[
         stack.id, stack.stack_name, stack.stack_status_reason,
@@ -196,8 +199,8 @@ def get_list():
     return data_stack
 
 
-def get_stack(stack_name):
-    heat = get_heat_client()
+def get_stack(stack_name, session=None):
+    heat = get_heat_client(session)
     data_stack = None
     try:
         stack = heat.stacks.get(stack_name)
@@ -220,8 +223,8 @@ def get_stack(stack_name):
 #
 #     return private_key
 
-def get_pkey_from_stack(stack_name):
-    heat = get_heat_client()
+def get_pkey_from_stack(stack_name, session=None):
+    heat = get_heat_client(session)
     private_key = None
     try:
         keyname = heat.stacks.output_show(stack_name, "key_name")["output"]["output_value"]
@@ -232,8 +235,8 @@ def get_pkey_from_stack(stack_name):
     return private_key
 
 
-def get_private_key(key_stack_name):
-    heat = get_heat_client()
+def get_private_key(key_stack_name, session=None):
+    heat = get_heat_client(session)
     private_key = None
     try:
         private_key = heat.stacks.output_show(key_stack_name, "private_key")["output"]["output_value"]
@@ -243,8 +246,8 @@ def get_private_key(key_stack_name):
     return private_key
 
 
-def get_metadata(stack_name, meta):
-    heat = get_heat_client()
+def get_metadata(stack_name, meta, session=None):
+    heat = get_heat_client(session)
     hostname = None
     try:
         hostname = heat.stacks.output_show(stack_name, meta)["output"]["output_value"]
@@ -254,8 +257,8 @@ def get_metadata(stack_name, meta):
     return hostname
 
 
-def get_meta_stack(stack_name):
-    heat = get_heat_client()
+def get_meta_stack(stack_name, session=None):
+    heat = get_heat_client(session)
     meta = None
     try:
         meta = heat.stacks.get(stack_name).outputs
@@ -265,8 +268,8 @@ def get_meta_stack(stack_name):
     return meta
 
 
-def do_delete(stack_name):
-    heat = get_heat_client()
+def do_delete(stack_name, session=None):
+    heat = get_heat_client(session)
     try:
         heat.stacks.delete(stack_name)
         return True

@@ -10,6 +10,8 @@ class Create(Base):
 usage:
         create [-i] [-f PATH]
         create [-t TEMPLATE] [-i]
+        create kubernetes
+        create vm
 
 Create stack
 
@@ -18,6 +20,10 @@ Options:
 -f PATH --file=PATH                 Set neo manifest file
 -t TEMPLATE --template TEMPLATE     Create neo.yml, TEMPLATE is ENUM(clusters,instances,networks)
 -i --interactive                    Interactive form with ncurses mode
+
+Commands:
+  kubernetes                        Create kubernetes stack
+  vm                                Create VM
 
 Tips!
     neo create -t instances         create instances
@@ -36,6 +42,18 @@ Run 'neo create COMMAND --help' for more information on a command.
                 else:
                     prompt.init(stack=tmpl)
             exit()
+
+        if self.args["kubernetes"]:
+            if self.args["--interactive"]:
+                print(ncurses.init(stack="clusters", project="kubernetes"))
+            else:
+                print(prompt.init(stack="clusters", project="kubernetes"))
+
+        if self.args["vm"]:
+            if self.args["--interactive"]:
+                print(ncurses.init(stack="instances", project="vm"))
+            else:
+                print(prompt.init(stack="instances", project="vm"))
 
         headers = ["ID", "Name", "Status", "Created", "Updated"]
 
@@ -64,6 +82,12 @@ Run 'neo create COMMAND --help' for more information on a command.
                     default_file = "neo.yml"
                 else:
                     exit()
+            else:
+                exit()
+        else:
+            q_deploy = utils.question("Continue to deploy? ")
+            if q_deploy:
+                default_file = "neo.yml"
             else:
                 exit()
 
