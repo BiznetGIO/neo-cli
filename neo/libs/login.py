@@ -13,7 +13,7 @@ user_domain_name = 'neo.id'
 
 
 def get_username():
-    return input("usename: ")
+    return input("username: ")
 
 
 def get_password():
