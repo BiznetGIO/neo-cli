@@ -1,13 +1,15 @@
 """Tests for our `neo create` subcommand."""
 
 import pytest
+import os
 from neo.libs import vm as vm_lib
 from neo.libs import orchestration as orch
 
 
 class TestCreate:
     def test_do_create(self):
-        deploy_init = orch.initialize("neo.yml")
+        cwd = os.getcwd()
+        deploy_init = orch.initialize(cwd + "/tests/neo.yml")
         orch.do_create(deploy_init)
 
         # check deployed vm
