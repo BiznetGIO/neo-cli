@@ -7,6 +7,7 @@ from neo.libs import orchestration as orch
 
 
 class TestCreate:
+    @pytest.mark.run(order=1)
     def test_do_create(self):
         cwd = os.getcwd()
         deploy_init = orch.initialize(cwd + "/tests/neo.yml")

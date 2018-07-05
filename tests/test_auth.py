@@ -5,7 +5,8 @@ import os
 from neo.libs import login
 
 
-class TestLogin:
+class TestAuth:
+    @pytest.mark.run(order=0)
     def test_do_login(self, monkeypatch):
         login.load_env_file()
         username = os.environ.get('OS_USERNAME')
@@ -17,6 +18,7 @@ class TestLogin:
         output = login.do_login()
         assert output == True
 
+    @pytest.mark.run(order=3)
     def test_do_logout(self):
         login.do_logout()
         # session removed if logout succeed
