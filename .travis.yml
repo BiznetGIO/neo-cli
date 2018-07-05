@@ -4,7 +4,7 @@ python:
 install:
 - pip install -e .
 - pip install coverage pytest pytest-cov pytest-ordering
-- python setup.py test
+- pytest --cov=neo -vv
 script:
 - pytest
 before_install:
