@@ -4,9 +4,8 @@ python:
 install:
 - pip install -e .
 - pip install coverage pytest pytest-cov pytest-ordering
-- pytest --cov=neo -vv
 script:
-- pytest
+- pytest --cov=neo -vv
 before_install:
 - openssl aes-256-cbc -K $encrypted_214af5c02543_key -iv $encrypted_214af5c02543_iv
   -in tests/.test.env.enc -out tests/.test.env -d
