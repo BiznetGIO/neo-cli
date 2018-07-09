@@ -6,7 +6,7 @@ from neo.libs import orchestration as orch
 
 
 class TestRemove:
-    @pytest.mark.run(order=2)
+    @pytest.mark.run(order=3)
     def test_do_delete_vm(self):
         # wait until successfully created
         vm_status = ''
