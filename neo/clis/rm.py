@@ -36,13 +36,9 @@ Run 'neo rm COMMAND --help' for more information on a command.
         if self.args["vm"]:
             instance_id = self.args["<VM_ID>"]
             try:
-                answer = ""
-                while answer not in ["y", "n"]:
-                    answer = input(
-                        "Are you sure to delete this virtual machines [y/n]? "
-                    ).lower()
+                q_vm = utils.question("Are you sure to delete this virtual machines ? ")
 
-                if answer == "y":
+                if q_vm:
                     vm_lib.do_delete(instance_id)
                     utils.log_info("VM has been deleted")
             except Exception as e:
@@ -56,12 +52,9 @@ Run 'neo rm COMMAND --help' for more information on a command.
         if self.args["network"]:
             network_id = self.args["<NETWORK_ID>"]
             try:
-                answer = ""
-                while answer not in ["y", "n"]:
-                    answer = input(
-                        "Are you sure to delete this network [Y/N]? ")
+                q_net = utils.question("Are you sure to delete this network ?")
 
-                if answer == "y":
+                if q_net:
                     network_lib.do_delete(network_id)
                     utils.log_info("network has been deleted")
             except Exception as e:
@@ -75,12 +68,10 @@ Run 'neo rm COMMAND --help' for more information on a command.
         if self.args["stack"]:
             stack_name = self.args["<STACK_NAME>"]
             try:
-                answer = ""
-                while answer not in ["y", "n"]:
-                    answer = input(
-                        "Are you sure to delete \"{}\" stack [Y/N]? ".format(stack_name))
+                q_stack = utils.question(
+                    "Are you sure to delete \"{}\" stack ? ".format(stack_name))
 
-                if answer == "y":
+                if q_stack:
                     proj = orch.do_delete(stack_name)
                     if proj:
                         utils.log_info("Stack {} has been deleted".format(stack_name))
@@ -109,12 +100,10 @@ Run 'neo rm COMMAND --help' for more information on a command.
 
         projects = utils.get_project(default_file)
         project_answer = ",".join(projects)
-        answer = ""
-        while answer not in ["y", "n"]:
-            answer = input("Are you sure to delete {} [y/n]? ".format(
-                project_answer).lower())
+        q_project = utils.question(
+            "Are you sure to delete {} ? ".format(project_answer))
 
-        if answer == "y":
+        if q_project:
             for project in projects:
                 proj = orch.do_delete(project)
                 if proj:
