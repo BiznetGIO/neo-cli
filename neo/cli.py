@@ -1,7 +1,6 @@
 """
 Usage:
   neo <command> [<args>...]
-  use 'neo -h' to show help page
 
 Options:
       --config string                    Location of client config
