@@ -39,8 +39,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
                 answer = ""
                 while answer not in ["y", "n"]:
                     answer = input(
-                        "Are you sure to delete this virtual machines [y/n]? "
-                    ).lower()
+                        "Are you sure to delete this virtual machines [y/n]? ")
+                    .lower()
 
                 if answer == "y":
                     vm_lib.do_delete(instance_id)
@@ -59,7 +59,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
                 answer = ""
                 while answer not in ["y", "n"]:
                     answer = input(
-                        "Are you sure to delete this network [Y/N]? ")
+                        "Are you sure to delete this network [y/n]? ")
+                    .lower()
 
                 if answer == "y":
                     network_lib.do_delete(network_id)
@@ -78,7 +79,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
                 answer = ""
                 while answer not in ["y", "n"]:
                     answer = input(
-                        "Are you sure to delete \"{}\" stack [Y/N]? ".format(stack_name))
+                        "Are you sure to delete \"{}\" stack [y/n]? "
+                        .format(stack_name)).lower()
 
                 if answer == "y":
                     proj = orch.do_delete(stack_name)
@@ -111,8 +113,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
         project_answer = ",".join(projects)
         answer = ""
         while answer not in ["y", "n"]:
-            answer = input("Are you sure to delete {} [y/n]? ".format(
-                project_answer).lower())
+            answer = input("Are you sure to delete {} [y/n]? "
+                           .format(project_answer)).lower()
 
         if answer == "y":
             for project in projects:
