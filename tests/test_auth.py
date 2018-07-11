@@ -18,7 +18,7 @@ class TestAuth:
         output = login.do_login()
         assert output == True
 
-    @pytest.mark.run(order=3)
+    @pytest.mark.run(order=5)
     def test_do_logout(self):
         login.do_logout()
         # session removed if logout succeed

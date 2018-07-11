@@ -1,0 +1,22 @@
+deploy:
+- others.unittest-key
+- networks.unittest-network
+- instances.unittest-vm
+instances:
+  unittest-vm:
+    parameters:
+      flavor: SS2.2
+      image: Ubuntu 18.04 LTS
+      key_name: unittest-key
+      private_network: unittest-network
+      username: unittest
+    template: vm
+networks:
+  unittest-network:
+    parameters:
+      cidr: 192.168.3.0/24
+      gateway: 192.168.3.1
+    template: private
+others:
+  unittest-key:
+    template: key-pairs
