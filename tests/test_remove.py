@@ -1,6 +1,7 @@
 """Tests for our `neo create` subcommand."""
 
 import pytest
+import time
 from neo.libs import vm as vm_lib
 from neo.libs import orchestration as orch
 
@@ -18,6 +19,7 @@ class TestRemove:
                     vm_status = vm.status
                     instance_id = vm.id
                     vm_name = vm.name
+            time.sleep(2)
             print('waiting until vm activated ...')
 
         vm_lib.do_delete(instance_id)
@@ -29,6 +31,7 @@ class TestRemove:
         # wait until successfully deleted
         while 'unittest' in vm_data:
             vm_data = vm_lib.get_list()
+            time.sleep(2)
             print('waiting until vm fully deleted ...')
 
         assert 'unittest-vm' not in vm_data

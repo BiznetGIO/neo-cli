@@ -2,6 +2,7 @@
 
 import pytest
 import os
+import time
 from neo.libs import vm as vm_lib
 from neo.libs import orchestration as orch
 
@@ -20,6 +21,7 @@ class TestUpdate:
                 if vm.name == 'unittest-vm':
                     vm_status = vm.status
                     vm_name = vm.name
+            time.sleep(2)
             print('waiting until vm activated ...')
 
         deploy_init = orch.initialize(cwd + "/tests/neo2.yml")
@@ -34,6 +36,7 @@ class TestUpdate:
             for vm in vm_data:
                 if "unittest-vm" in vm:
                     updated_status = vm[4]
+            time.sleep(2)
             print('waiting until vm fully updated ...')
 
         assert updated_status != None
