@@ -21,7 +21,7 @@ class TestAttach:
             for vm in vm_data:
                 if vm.name == 'unittest-vm':
                     vm_status = vm.status
-            time.sleep(2)
+            time.sleep(4)
             print('vm still updating ...')
 
         outs = popen(['neo', 'attach', '-c "ls -a"'], stdout=PIPE).communicate()
