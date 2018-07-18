@@ -3,7 +3,6 @@ import os
 from testfixtures import LogCapture
 from neo.libs import utils
 from neo.libs import orchestration as orch
-from neo.libs import login
 
 
 class TestUtils:

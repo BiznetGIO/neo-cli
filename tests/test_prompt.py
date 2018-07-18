@@ -1,10 +1,6 @@
 import pytest
-import os
-from testfixtures import LogCapture
-from neo.libs import utils
-from neo.libs import orchestration as orch
-from neo.libs import login
 from neo.libs import prompt
+
 
 class TestPrompt:
     # TODO need login
