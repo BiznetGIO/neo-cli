@@ -1,9 +1,11 @@
 """Tests for our `neo attach` subcommand."""
 
 import pytest
-import os, signal
-from subprocess import PIPE, Popen as popen, TimeoutExpired
+import os
+import time
+from subprocess import PIPE, Popen as popen
 from neo.libs import vm as vm_lib
+
 
 class TestAttach:
     @pytest.mark.run(order=3)
@@ -19,17 +21,9 @@ class TestAttach:
             for vm in vm_data:
                 if vm.name == 'unittest-vm':
                     vm_status = vm.status
-                    vm_id = vm.id
+            time.sleep(4)
             print('vm still updating ...')
 
-        proc = popen(['neo', 'attach', 'vm', vm_id ], stdout=PIPE)
-        try:
-            outs, errs = proc.communicate(timeout=10)
-        except TimeoutExpired:
-            # wait process. So it doesn't break terminal
-            proc.send_signal(signal.SIGINT)
-            proc.wait()
-            outs, errs = proc.communicate()
-
+        outs = popen(['neo', 'attach', '-c "ls -a"'], stdout=PIPE).communicate()
         os.chdir(os.pardir)
-        assert 'unittest@unittest-vm:~$' in str(outs)
+        assert 'Success' in str(outs)
