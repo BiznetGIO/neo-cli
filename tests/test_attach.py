@@ -3,7 +3,7 @@
 import pytest
 import os
 import time
-from subprocess import PIPE, Popen as popen
+from subprocess import PIPE, Popen
 from neo.libs import vm as vm_lib
 
 
@@ -24,6 +24,6 @@ class TestAttach:
             time.sleep(4)
             print('vm still updating ...')
 
-        outs = popen(['neo', 'attach', '-c "ls -a"'], stdout=PIPE).communicate()
+        outs = Popen(['neo', 'attach', '-c "ls -a"'], stdout=PIPE).communicate()
         os.chdir(os.pardir)
         assert 'Success' in str(outs)

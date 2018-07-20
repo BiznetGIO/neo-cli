@@ -4,7 +4,7 @@ import pytest
 import os
 from io import StringIO
 from contextlib import redirect_stdout
-from subprocess import PIPE, Popen as popen
+from subprocess import PIPE, Popen
 from neo.clis import Ls
 
 
@@ -40,4 +40,5 @@ class TestLs:
             a = Ls({'<args>': [], '<command>': 'ls'}, None)
             foo = a.execute()
         out = f.getvalue()
+        os.chdir(os.pardir)
         assert 'unittest-vm' in out
