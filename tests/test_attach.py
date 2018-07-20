@@ -3,13 +3,14 @@
 import pytest
 import os
 import time
-from subprocess import PIPE, Popen
 from neo.libs import vm as vm_lib
-
+from neo.clis import Attach
+from io import StringIO
+from contextlib import redirect_stdout
 
 class TestAttach:
     @pytest.mark.run(order=3)
-    def test_attach(self):
+    def test_attach_command(self):
         # neo.yml located inside tests dir
         os.chdir("tests")
 
@@ -24,6 +25,11 @@ class TestAttach:
             time.sleep(4)
             print('vm still updating ...')
 
-        outs = Popen(['neo', 'attach', '-c "ls -a"'], stdout=PIPE).communicate()
+        f = StringIO()
+        with redirect_stdout(f):
+            a = Attach({'<args>': ['-c', 'ls -a'],
+                        '<command>': 'attach'}, '-c', 'ls -a')
+            a.execute()
+            out = f.getvalue()
         os.chdir(os.pardir)
-        assert 'Success' in str(outs)
+        assert 'Success' in out

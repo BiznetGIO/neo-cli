@@ -4,7 +4,6 @@ import pytest
 import os
 from io import StringIO
 from contextlib import redirect_stdout
-from subprocess import PIPE, Popen
 from neo.clis import Ls
 
 
