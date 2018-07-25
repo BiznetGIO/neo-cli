@@ -7,6 +7,8 @@ from neo.libs import vm as vm_lib
 from neo.clis import Attach
 from io import StringIO
 from contextlib import redirect_stdout
+from subprocess import PIPE, Popen
+
 
 class TestAttach:
     @pytest.mark.run(order=3)
@@ -32,4 +34,18 @@ class TestAttach:
             a.execute()
             out = f.getvalue()
         os.chdir(os.pardir)
+
         assert 'Success' in out
+
+    def test_attach_vm(self):
+        vm_data = vm_lib.get_list()
+        for vm in vm_data:
+            if vm.name == 'unittest-vm':
+                vm_id = vm.id
+
+        cmd = ['neo', 'attach', 'vm', vm_id]
+        with open("stdout.txt", "wb") as out, open("stderr.txt", "wb") as err:
+            Popen(cmd, stdout=out, stderr=err)
+        out = open('tests/stderr.txt', 'r').read()
+
+        assert 'successful!' in out
