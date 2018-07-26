@@ -40,3 +40,9 @@ class TestUpdate:
             print('waiting until vm fully updated ...')
 
         assert updated_status != None
+
+    def test_do_update_exception(self):
+        with pytest.raises(SystemExit):
+            a = Update({'<args>': ['-f', 'tests/neoFoo.yml'],
+                    '<command>': 'update'}, '-f', 'tests/neoFoo.yml')
+            a.execute()
