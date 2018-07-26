@@ -8,7 +8,6 @@ from neo.clis import Ls
 
 
 class TestLs:
-    @pytest.mark.run(order=4)
     def test_ls_vm(self):
         with pytest.raises(SystemExit):
             a = Ls({'<command>': 'ls'}, 'vm')
