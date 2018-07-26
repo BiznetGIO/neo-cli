@@ -28,8 +28,8 @@ class TestLs:
         # no exit(). but failed when calle without
         # raises(SystemExit)
         with pytest.raises(SystemExit):
-            a = Ls({'<args>': ['-o', 'referensi-vm'], '<command>': 'ls'},
-                   '-o', 'referensi-vm')
+            a = Ls({'<args>': ['-o', 'unittest-vm'], '<command>': 'ls'},
+                   '-o', 'unittest-vm')
             a.execute()
 
     def test_ls(self):
