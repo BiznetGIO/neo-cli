@@ -53,3 +53,9 @@ class TestUtils:
                             lambda x, y: ('', 'bar'))
         x = utils.prompt_generator('fofo', 'baz')
         assert x == ('', 'bar')
+
+    def test_isfloat_eror(self):
+        assert utils.isfloat('f') == False
+
+    def test_isint_eror(self):
+        assert utils.isint('f') == False
