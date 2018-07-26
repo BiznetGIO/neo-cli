@@ -46,6 +46,7 @@ class TestAttach:
         cmd = ['neo', 'attach', 'vm', vm_id]
         with open("stdout.txt", "wb") as out, open("stderr.txt", "wb") as err:
             Popen(cmd, stdout=out, stderr=err)
+        time.sleep(8)
         out = open('stderr.txt', 'r').read()
         os.remove('stdout.txt')
         os.remove('stderr.txt')
