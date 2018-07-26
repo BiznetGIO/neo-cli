@@ -33,8 +33,8 @@ class TestAttach:
                         '<command>': 'attach'}, '-c', 'ls -a')
             a.execute()
             out = f.getvalue()
-        os.chdir(os.pardir)
 
+        os.chdir(os.pardir)
         assert 'Success' in out
 
     def test_attach_vm(self):
@@ -46,6 +46,7 @@ class TestAttach:
         cmd = ['neo', 'attach', 'vm', vm_id]
         with open("stdout.txt", "wb") as out, open("stderr.txt", "wb") as err:
             Popen(cmd, stdout=out, stderr=err)
-        out = open('tests/stderr.txt', 'r').read()
-
+        out = open('stderr.txt', 'r').read()
+        os.remove('stdout.txt')
+        os.remove('stderr.txt')
         assert 'successful!' in out
