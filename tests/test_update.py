@@ -5,7 +5,7 @@ import os
 import time
 from neo.libs import vm as vm_lib
 from neo.libs import orchestration as orch
-
+from neo.clis import Update
 
 class TestUpdate:
     @pytest.mark.run(order=2)
@@ -24,11 +24,11 @@ class TestUpdate:
             time.sleep(2)
             print('waiting until vm activated ...')
 
-        deploy_init = orch.initialize(cwd + "/tests/neo2.yml")
-        orch.do_update(deploy_init)
+        a = Update({'<args>': ['-f', 'tests/neo2.yml'],
+                    '<command>': 'update'}, '-f', 'tests/neo2.yml')
+        a.execute()
         print(vm_name + ' updated')
 
-        # check updated vm
         # wait until successfully updated
         updated_status = None
         while updated_status == None:
@@ -40,3 +40,9 @@ class TestUpdate:
             print('waiting until vm fully updated ...')
 
         assert updated_status != None
+
+    def test_do_update_exception(self):
+        with pytest.raises(SystemExit):
+            a = Update({'<args>': ['-f', 'tests/neoFoo.yml'],
+                    '<command>': 'update'}, '-f', 'tests/neoFoo.yml')
+            a.execute()

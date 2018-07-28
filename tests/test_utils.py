@@ -41,3 +41,21 @@ class TestUtils:
         with LogCapture() as log:
             utils.log_err("test errors")
         assert 'test errors' in str(log.records)
+
+    def test_form_generator(self, monkeypatch):
+        monkeypatch.setattr("neo.libs.utils.form_generator",
+                            lambda x, y: ('foo', 'bar'))
+        out = utils.form_generator('fofo', 'baz')
+        assert out == ('foo', 'bar')
+
+    def test_prompt_generator(self, monkeypatch):
+        monkeypatch.setattr("neo.libs.utils.prompt_generator",
+                            lambda x, y: ('', 'bar'))
+        x = utils.prompt_generator('fofo', 'baz')
+        assert x == ('', 'bar')
+
+    def test_isfloat_eror(self):
+        assert utils.isfloat('f') == False
+
+    def test_isint_eror(self):
+        assert utils.isint('f') == False
