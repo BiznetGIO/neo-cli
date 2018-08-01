@@ -1,13 +1,14 @@
 language: python
+cache: false
 python:
 - '3.6'
 install:
 - pip install -r requirements.txt
 - pip install -e .
-- pip install coverage pytest pytest-cov pytest-ordering
+- pip install coverage pytest pytest-cov pytest-ordering testfixtures
 - pip freeze --local
 script:
-- pytest --cov=neo -vv
+- pytest --cov=neo -vv -s
 before_install:
 - openssl aes-256-cbc -K $encrypted_214af5c02543_key -iv $encrypted_214af5c02543_iv
   -in tests/.test.env.enc -out tests/.test.env -d

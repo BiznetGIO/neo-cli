@@ -53,7 +53,7 @@ def check_key(dict, val):
 def question(word):
     answer = False
     while answer not in ["y", "n"]:
-        answer = input("{} [y/n]? ".format(word).lower())
+        answer = input("{} [y/n]? ".format(word)).lower().strip()
 
     if answer == "y":
         answer = True

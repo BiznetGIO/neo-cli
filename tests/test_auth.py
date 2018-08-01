@@ -3,7 +3,7 @@
 import pytest
 import os
 from neo.libs import login
-
+from neo.libs import utils
 
 class TestAuth:
     @pytest.mark.run(order=0)
@@ -18,9 +18,26 @@ class TestAuth:
         output = login.do_login()
         assert output == True
 
-    @pytest.mark.run(order=3)
+    @pytest.mark.run(order=-1)
     def test_do_logout(self):
         login.do_logout()
         # session removed if logout succeed
         output = login.check_session()
         assert output == False
+
+    def test_env_file(self):
+        assert login.check_env() == True
+
+    def test_create_env_file(self):
+        home = os.path.expanduser("~")
+        env_file = "{}/.neo.env".format(home)
+        env_file_tmp = "{}/.neo.tmp".format(home)
+
+        # move already existing file
+        os.rename(env_file, env_file_tmp)
+        login.create_env_file("usertest", "passwd", "1")
+        login.add_token("1abc")
+        outs = utils.read_file(env_file)
+        os.remove(env_file)
+        os.rename(env_file_tmp, env_file)
+        assert 'usertest' in outs
