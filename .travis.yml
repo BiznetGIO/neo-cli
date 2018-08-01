@@ -1,4 +1,5 @@
 language: python
+cache: false
 python:
 - '3.6'
 install:
