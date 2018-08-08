@@ -2,7 +2,7 @@
 
 ## Python Version
 
-NEO CLI only support Python 3 or newer.
+neo-cli only support Python 3 or newer.
 
 ## Python3
 
@@ -76,7 +76,7 @@ Grab those dependencies with
 $ pip3 install -r requirements.txt
 ```
 
-## Install NEO CLI
+## Install neo-cli
 
 ``` bash
 pip3 install -e .

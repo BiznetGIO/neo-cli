@@ -1,4 +1,4 @@
-# NEO CLI Documentation
+# neo-cli Documentation
 
 
 You can get started with [installation](instalation.md). Then go to
