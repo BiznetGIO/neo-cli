@@ -1,6 +1,6 @@
-# Contributing to NEO CLI
+# Contributing to neo-cli
 
-We'd be happy for you to contribute to NEO CLI.
+We'd be happy for you to contribute to neo-cli.
 
 ## Project organization
 
@@ -18,7 +18,7 @@ We'd be happy for you to contribute to NEO CLI.
 3. Always *be as descriptive as you can*.
 4. What is the expected behavior? What is the actual behavior? What are the steps to reproduce?
 5. Attach screenshots, videos, GIFs if possible.
-6. **Include NEO CLI version or branch experiencing the issue.**
+6. **Include neo-cli version or branch experiencing the issue.**
 7. **Include OS version experiencing the issue.**
 
 
