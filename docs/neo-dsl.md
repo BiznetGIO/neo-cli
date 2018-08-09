@@ -4,11 +4,11 @@
 
 ```yaml
 <category>:
-<name_entity>:
-parameters:
-- <parameter_1_key> : <paramater_1_value>
-- <parameter_2_key> : <paramater_2_value>
-template: <template>
+  <name_entity>:
+  parameters:
+    <parameter_1_key> : <paramater_1_value>
+    <parameter_2_key> : <paramater_2_value>
+  template: <template>
 ```
 
 ## Templates
@@ -34,15 +34,15 @@ example :
 
 ```yaml
 clusters:
-neo-k8s:
-template: "kubernetes"
-parameters:
-master_flavor: SS2.1
-worker_flavor: SS2.1
-master_size: 1
-worker_size: 1
-deploy:
-- clusters.neo-k8s
+  neo-k8s:
+    template: "kubernetes"
+    parameters:
+      master_flavor: SS2.1
+      worker_flavor: SS2.1
+      master_size: 1
+      worker_size: 1
+    deploy:
+    - clusters.neo-k8s
 ```
 
 ### Networks
@@ -79,23 +79,23 @@ deploy:
 - networks.neowork-coba
 - instances.vm-coba
 instances:
-vm-coba:
-parameters:
-flavor: SS2.1
-image: CentOS 7.3
-key_name: key-coba
-private_network: neowork-coba
-username: ibnu
-template: vm
+  vm-coba:
+    parameters:
+      flavor: SS2.1
+      image: CentOS 7.3
+      key_name: key-coba
+      private_network: neowork-coba
+      username: ibnu
+    template: vm
 networks:
-neowork-coba:
-parameters:
-cidr: 192.168.3.0/24
-gateway: 192.168.3.1
-template: private
+  neowork-coba:
+    parameters:
+      cidr: 192.168.3.0/24
+      gateway: 192.168.3.1
+    template: private
 others:
-key-coba:
-template: key-pairs
+  key-coba:
+    template: key-pairs
 ```
 
 #### plesk (Plesk Bundle)
