@@ -43,7 +43,7 @@ Run 'neo ls COMMAND --help' for more information on a command.
         if self.args["vm"]:
             data_instance = list()
             for instance in vm_lib.get_list():
-                pre_instance = [instance.id, instance.name]
+                pre_instance = [instance.id, instance.name, instance.key_name]
                 pre_instance.append(image.detail(instance.image["id"]).name)
                 flavors = vm_lib.detail_flavor(instance.flavor["id"])
                 flavors_name = flavors.name
@@ -79,7 +79,7 @@ Run 'neo ls COMMAND --help' for more information on a command.
                 tabulate(
                     data_instance,
                     headers=[
-                        "ID", "Name", "Image", "Flavor", "RAM (GiB)", "vCPU",
+                        "ID", "Name", "Key Pair", "Image", "Flavor", "RAM (GiB)", "vCPU",
                         "Addresses", "Status"
                     ],
                     tablefmt="grid"))

@@ -1,6 +1,8 @@
-# NEO CLI [![Gitter](https://badges.gitter.im/BiznetGIO/neo-cli.svg)](https://gitter.im/BiznetGIO/neo-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/BiznetGIO/neo-cli.svg?branch=master)](https://travis-ci.org/BiznetGIO/neo-cli)
+# neo-cli
 
-NEO CLI is agnostic orchestration tools for openstack
+[![Gitter](https://badges.gitter.im/BiznetGIO/neo-cli.svg)](https://gitter.im/BiznetGIO/neo-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/BiznetGIO/neo-cli.svg?branch=master)](https://travis-ci.org/BiznetGIO/neo-cli)
+
+neo-cli is agnostic orchestration tools for openstack
 
 ![neo](/docs/img/neo.gif)
 
@@ -8,7 +10,7 @@ NEO CLI is agnostic orchestration tools for openstack
 
 Install and update using  [pip](https://pip.pypa.io/en/stable/quickstart/)
 
-At the time NEO CLI only support Python3 or newer.
+At the time neo-cli only support Python3 or newer.
 
 ``` bash
 pip3 install -U neo-cli
@@ -26,3 +28,4 @@ pip3 install -U neo-cli
 - [dark-reiser](https://github.com/dark-reiser)
 - [ovryenni](https://github.com/ovryenni)
 - [azzamsa](http://github.com/azzamsa/)
+- [meongbego](https://github.com/meongbego)

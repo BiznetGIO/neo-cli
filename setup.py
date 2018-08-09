@@ -27,7 +27,7 @@ class RunTests(Command):
 
     def run(self):
         """Run all tests!"""
-        errno = call(['py.test', '--cov=neo', '--cov-report=term-missing'])
+        errno = call(['pytest', '--cov=neo', '-vv'])
         raise SystemExit(errno)
 
 
@@ -56,7 +56,8 @@ setup(
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=install_requires,
     extras_require={
-        'test': ['coverage', 'pytest', 'pytest-cov'],
+        'test': ['coverage', 'pytest', 'pytest-cov', 'pytest-ordering',
+                 'testfixtures'],
     },
     entry_points={
         'console_scripts': [
