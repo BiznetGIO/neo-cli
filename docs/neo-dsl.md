@@ -112,7 +112,7 @@ username | string | yes | -
 email | string | yes | -
 password | string | yes | -
 activation_key | string | yes | -
-floating_desc | json (ex : {"description":"APAAJADAH"}) | no | -
+floating_desc | string | no | -
 
 
 ### Others
