@@ -131,6 +131,16 @@ instances:
         type: string
         label: Set plesk activation key
         description: Set activation key to plesk bundle.
+      neo_type:
+        type: json
+        label: neo type metadata
+        description: Set neo type metadata
+        default: {"metadata": {"neo_type": "PLSK"}}
+      floating_desc:
+        type: string
+        label: neo description for floating ip
+        description: neo description for floating ip
+        default: PLSK
 
 others:
     key-pairs:
