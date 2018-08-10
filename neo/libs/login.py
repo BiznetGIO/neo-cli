@@ -78,6 +78,7 @@ def get_project_id(username, password):
 
 
 def do_login():
+    # don't prompt user if .neo.env exist
     if check_env():
         load_env_file()
         username = os.environ.get('OS_USERNAME')
@@ -85,8 +86,8 @@ def do_login():
         project_id = get_project_id(username, password)
 
         set_session(collect_session_values(username, password, project_id))
-        return True
         utils.log_info("Login Success")
+        return True
     else:
         try:
             username = get_username()
