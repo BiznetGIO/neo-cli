@@ -78,34 +78,47 @@ def get_project_id(username, password):
 
 
 def do_login():
-    try:
-        username = get_username()
-        password = get_password()
+    if check_env():
+        load_env_file()
+        username = os.environ.get('OS_USERNAME')
+        password = os.environ.get('OS_PASSWORD')
         project_id = get_project_id(username, password)
 
-        sess = generate_session(
-            auth_url=auth_url,
-            username=username,
-            password=password,
-            user_domain_name=user_domain_name,
-            project_id=project_id,
-            reauthenticate=True,
-            include_catalog=True)
-
-        set_session(sess)
-
-        utils.log_info("Login Success")
+        set_session(collect_session_values(username, password, project_id))
         return True
-    except Exception as e:
-        utils.log_err(e)
-        utils.log_err("Login Failed")
-        return False
+        utils.log_info("Login Success")
+    else:
+        try:
+            username = get_username()
+            password = get_password()
+            project_id = get_project_id(username, password)
+
+            set_session(collect_session_values(username, password, project_id))
+            create_env_file(username, password, project_id)
+            utils.log_info("Login Success")
+            return True
+        except Exception as e:
+            utils.log_err(e)
+            utils.log_err("Login Failed")
+            return False
 
 
 def do_logout():
     if check_session():
         os.remove('/tmp/session.pkl')
         utils.log_info("Logout Success")
+
+
+def collect_session_values(username, password, project_id):
+    sess = generate_session(
+        auth_url=auth_url,
+        username=username,
+        password=password,
+        user_domain_name=user_domain_name,
+        project_id=project_id,
+        reauthenticate=True,
+        include_catalog=True)
+    return sess
 
 
 def set_session(sess):
@@ -123,7 +136,7 @@ def get_session():
             sess = dill.load(f)
         return sess
     except Exception as e:
-        print("you are not authorized")
+        print("retrieving last login info")
         do_login()
         return get_session()
 
