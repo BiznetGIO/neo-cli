@@ -78,18 +78,20 @@ def get_project_id(username, password):
 
 
 def do_login():
-    # don't prompt user if .neo.env exist
-    if check_env():
-        load_env_file()
-        username = os.environ.get('OS_USERNAME')
-        password = os.environ.get('OS_PASSWORD')
-        project_id = get_project_id(username, password)
+    try:
+        # don't prompt user if .neo.env exist
+        if check_env():
+            print("Retrieving last login info ...")
+            load_env_file()
+            username = os.environ.get('OS_USERNAME')
+            password = os.environ.get('OS_PASSWORD')
+            project_id = get_project_id(username, password)
 
-        set_session(collect_session_values(username, password, project_id))
-        utils.log_info("Login Success")
-        return True
-    else:
-        try:
+            set_session(collect_session_values(username, password, project_id))
+            utils.log_info("Login Success")
+            return True
+        else:
+            print("You don't have last login info")
             username = get_username()
             password = get_password()
             project_id = get_project_id(username, password)
@@ -98,10 +100,10 @@ def do_login():
             create_env_file(username, password, project_id)
             utils.log_info("Login Success")
             return True
-        except Exception as e:
-            utils.log_err(e)
-            utils.log_err("Login Failed")
-            return False
+    except Exception as e:
+        utils.log_err(e)
+        utils.log_err("Login Failed")
+        return False
 
 
 def do_logout():
@@ -137,7 +139,6 @@ def get_session():
             sess = dill.load(f)
         return sess
     except Exception as e:
-        print("retrieving last login info")
         do_login()
         return get_session()
 
