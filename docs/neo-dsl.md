@@ -112,7 +112,8 @@ username | string | yes | -
 email | string | yes | -
 password | string | yes | -
 activation_key | string | yes | -
-floating_desc | string | no | -
+floating_desc | string | no | set description to floating ip
+neo_type  | {"metadata": {"neo_type": <metadata_type>}} | no | add metadata to neo vm
 
 
 ### Others
