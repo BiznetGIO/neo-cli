@@ -39,3 +39,23 @@ def detail_flavor(flavor_id, session=None):
 def get_keypairs(session=None):
     compute = get_nova_client(session)
     return compute.keypairs.list()
+
+
+def get_console_logs(instance_id, length=None, session=None):
+    compute = get_nova_client(session)
+    logs = None
+    if length:
+        logs = compute.servers.get_console_output(instance_id, length=length)
+    else:
+        logs = compute.servers.get_console_output(instance_id)
+    return logs
+
+
+def suspend(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.suspend(vm_id)
+
+
+def resume(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.resume(vm_id)
