@@ -79,23 +79,27 @@ def get_project_id(username, password):
 
 def do_login():
     try:
-        username = get_username()
-        password = get_password()
-        project_id = get_project_id(username, password)
+        # don't prompt user if .neo.env exist
+        if check_env():
+            print("Retrieving last login info ...")
+            load_env_file()
+            username = os.environ.get('OS_USERNAME')
+            password = os.environ.get('OS_PASSWORD')
+            project_id = get_project_id(username, password)
 
-        sess = generate_session(
-            auth_url=auth_url,
-            username=username,
-            password=password,
-            user_domain_name=user_domain_name,
-            project_id=project_id,
-            reauthenticate=True,
-            include_catalog=True)
+            set_session(collect_session_values(username, password, project_id))
+            utils.log_info("Login Success")
+            return True
+        else:
+            print("You don't have last login info")
+            username = get_username()
+            password = get_password()
+            project_id = get_project_id(username, password)
 
-        set_session(sess)
-
-        utils.log_info("Login Success")
-        return True
+            set_session(collect_session_values(username, password, project_id))
+            create_env_file(username, password, project_id)
+            utils.log_info("Login Success")
+            return True
     except Exception as e:
         utils.log_err(e)
         utils.log_err("Login Failed")
@@ -106,6 +110,18 @@ def do_logout():
     if check_session():
         os.remove('/tmp/session.pkl')
         utils.log_info("Logout Success")
+
+
+def collect_session_values(username, password, project_id):
+    sess = generate_session(
+        auth_url=auth_url,
+        username=username,
+        password=password,
+        user_domain_name=user_domain_name,
+        project_id=project_id,
+        reauthenticate=True,
+        include_catalog=True)
+    return sess
 
 
 def set_session(sess):
@@ -123,7 +139,6 @@ def get_session():
             sess = dill.load(f)
         return sess
     except Exception as e:
-        print("you are not authorized")
         do_login()
         return get_session()
 
