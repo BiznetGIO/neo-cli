@@ -15,6 +15,12 @@ def get_list(session=None):
     return networks['networks']
 
 
+def get_floatingips():
+    neutron = get_neutron_client(None)
+    floatingips = neutron.list_floatingips()
+    return floatingips['floatingips']
+
+
 def do_delete(network_id, session=None):
     neutron = get_neutron_client(session)
     neutron.delete_network(network_id)
