@@ -6,3 +6,4 @@ from .create import *
 from .update import *
 from .rm import *
 from .attach import *
+from .log import *
