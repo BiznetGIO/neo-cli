@@ -15,6 +15,7 @@ usage:
         ls stack
         ls vm
         ls network
+        ls floatingips
 
 List all stack
 
@@ -27,6 +28,7 @@ Commands:
  stack                  List all Stacks
  vm                     List all virtual machines
  network                List all network
+ floatingips             List all floating ip
 
 Run 'neo ls COMMAND --help' for more information on a command.
 """
@@ -97,6 +99,22 @@ Run 'neo ls COMMAND --help' for more information on a command.
                 tabulate(
                     data_network,
                     headers=["ID", "Name", "Status"],
+                    tablefmt="grid"))
+            exit()
+
+        if self.args["floatingips"]:
+            data_floatingips = [[
+                floatingips['floating_ip_address'],
+                floatingips['created_at'], floatingips['status']
+            ] for floatingips in network_lib.get_floatingips()]
+            if len(data_floatingips) == 0:
+                utils.log_err("No Data...")
+                print(self.__doc__)
+                exit()
+            print(
+                tabulate(
+                    data_floatingips,
+                    headers=["IP Address", "Created at", "Status"],
                     tablefmt="grid"))
             exit()
 
