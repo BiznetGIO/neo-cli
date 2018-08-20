@@ -5,17 +5,22 @@ from neo.libs import utils
 
 class Log(Base):
     """
-    usage: 
+    usage:
+        log vm [-l LINE]
         log vm
+        log vm <VM_ID> [-l LINE]
         log vm <VM_ID>
 
-    Show Logs
+    Options:
+    -h --help                             Print usage
+    -l LINE --line=LINE                   Print outputs from  line  page
     """
 
 
     def execute(self):
         if self.args["vm"]:
             instance_id = self.args["<VM_ID>"]
+            line = self.args['--line']
             if not instance_id:
                 default_file = orch.check_manifest_file()
                 if default_file:
@@ -28,11 +33,11 @@ class Log(Base):
                                 instance_id = vm.id
                                 break
                     else:
-                       utils.log_err('VM not found')
+                       utils.log_err('VM not found') 
                 else:
                     utils.log_err("Can't find neo.yml manifest file!")
             try:
-                utils.log_info(vm_lib.get_console_logs(instance_id))
+                utils.log_info(vm_lib.get_console_logs(instance_id, length=line))
             except Exception as err:
                 utils.log_err(err.message)
         exit()
