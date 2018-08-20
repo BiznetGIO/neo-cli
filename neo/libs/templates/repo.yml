@@ -109,7 +109,7 @@ instances:
         type: string
         label: Image name or ID
         description: Image to be used for server. Please use an Centos based image.
-        default: "Ubuntu 18.04 LTS"
+        default: "Image-Plesk-Bundle-1.0"
       flavor:
         type: string
         label: Flavor
