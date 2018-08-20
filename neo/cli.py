@@ -20,8 +20,7 @@ Run 'neo COMMAND --help' for more information on a command.
 """
 
 from inspect import getmembers, isclass
-from docopt import docopt
-# from docopt import DocoptExit
+from docopt import docopt, DocoptExit
 from neo import __version__ as VERSION
 
 
@@ -29,35 +28,27 @@ def main():
     """Main CLI entrypoint."""
     import neo.clis
     options = docopt(__doc__, version=VERSION, options_first=True)
-    # Retrieve the command to execute.
     command_name = ""
     args = ""
-    command_args = ""
-    command_args2 = ""
+    command_class =""
 
-    for (k, v) in options.items():
-        if k == '<command>' and v:
-            command_name = options['<command>']
-        if k == '<args>' and v:
-            args = options['<args>']
+    command_name = options.pop('<command>')
+    args = options.pop('<args>')
 
-    if not args:
-        command_args = None
-    else:
-        command_args = args[0]
-        if len(args) > 1:
-            command_args2 = args[1]
+    if args is None:
+        args = {}
 
-    if hasattr(neo.clis, command_name) and command_name != '':
+    try:
         module = getattr(neo.clis, command_name)
         neo.clis = getmembers(module, isclass)
-        command = [command[1] for command in neo.clis
+        command_class = [command[1] for command in neo.clis
                    if command[0] != 'Base'][0]
-        if command_args2 != '':
-            command = command(options, command_args, command_args2)
-        else:
-            command = command(options, command_args)
-        command.execute()
+    except AttributeError as e:
+        print(e)
+        raise DocoptExit()
+
+    command = command_class(options, args)
+    command.execute()
 
 
 if __name__ == '__main__':
