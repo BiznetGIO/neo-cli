@@ -15,7 +15,7 @@ In addition, `neo-cli` aims to support diverse cloud platforms in near
 future. So no matter what your cloud platforms is, `neo-cli` will always be
 your friend.
 
-See `neo-cli` in [action](https://asciinema.org/a/164200)
+Watch `neo-cli` in [action](https://asciinema.org/a/164200)
 
 
 ![neo](/docs/img/neo.gif)
