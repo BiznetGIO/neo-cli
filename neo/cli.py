@@ -32,15 +32,19 @@ def main():
     args = ""
     command_class =""
 
-    command_name = options.pop('<command>').capitalize()
+    command_name = options.pop('<command>')
     args = options.pop('<args>')
 
     if args is None:
         args = {}
 
     try:
-        command_class = getattr(neo.clis, command_name)
+        module = getattr(neo.clis, command_name)
+        neo.clis = getmembers(module, isclass)
+        command_class = [command[1] for command in neo.clis
+                   if command[0] != 'Base'][0]
     except AttributeError as e:
+        print(e)
         raise DocoptExit()
 
     command = command_class(options, args)
