@@ -141,6 +141,11 @@ instances:
         label: neo description for floating ip
         description: neo description for floating ip
         default: PLSK
+      package:
+        type: string
+        label: plesk package
+        description: plesk package
+        default: wordpress
 
 others:
     key-pairs:
