@@ -102,18 +102,19 @@ others:
 
 parameters :
 
-key | value | requirement | description
----|---|---|---
-private_network | string | yes | -
-key_name | string | yes | -
-image | string | yes | -
-flavor | string | yes | -
-username | string | yes | -
-email | string | yes | -
-password | string | yes | -
-activation_key | string | yes | -
-floating_desc | string | no | set description to floating ip
-neo_type  | {"metadata": {"neo_type": <metadata_type>}} | no | add metadata to neo vm
+key | value | requirement | default value | description
+---|---|---|---|---
+private_network | string | yes | - | -
+key_name | string | yes | - | -
+image | string | yes | Image-Plesk-Bundle-1.0 | -
+flavor | string | yes | - | -
+username | string | yes | - | -
+email | string | yes | - | -
+password | string | yes | - | -
+activation_key | string | yes | - | -
+floating_desc | string | no | PLSK | set description to floating ip
+neo_type  | {"metadata": {"neo_type": <metadata_type>}} | no | {"metadata": {"neo_type": "PLSK"}} | add metadata to neo vm
+package | enum(wordpress, business) | no | wordpress | add metadata to neo vm
 
 
 ### Others

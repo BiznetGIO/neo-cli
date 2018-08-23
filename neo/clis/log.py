@@ -36,7 +36,14 @@ class Log(Base):
                        utils.log_err('VM not found') 
                 else:
                     utils.log_err("Can't find neo.yml manifest file!")
+            else:
+                vm_data = vm_lib.get_list()
+                for vm in vm_data:
+                    if (instance_id == vm.name) or (instance_id == vm.id):
+                        instance_id = vm.id
             try:
+                if not limit:
+                    limit = 30
                 utils.log_info(vm_lib.get_console_logs(instance_id, length=limit))
             except Exception as err:
                 utils.log_err(err.message)
