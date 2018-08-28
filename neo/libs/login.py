@@ -26,9 +26,7 @@ def generate_session(auth_url, username, password, **kwargs):
         username=username,
         password=password,
         **kwargs)
-
     sess = session.Session(auth=auth)
-
     return sess
 
 
@@ -40,18 +38,15 @@ def create_env_file(username, password, project_id, keystone_url=None, domain_na
     auth_url_temps = None
     user_domain_name_temps = None
 
-    if keystone_url and domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = domain_name
-    elif keystone_url and not domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = user_domain_name
-    elif not keystone_url and domain_name:
+    if not keystone_url:
         auth_url_temps = auth_url
-        user_domain_name_temps = domain_name
     else:
-        auth_url_temps = auth_url
+        auth_url_temps = keystone_url
+
+    if  not domain_name :
         user_domain_name_temps = user_domain_name
+    else:
+        user_domain_name_temps = domain_name
 
     try:
         env_file = open("{}/.neo.env".format(home), "w+")
@@ -80,18 +75,19 @@ def load_env_file():
 
 
 def get_project_id(username, password, keystone_url=None, domain_name=None):
-    if keystone_url and domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = domain_name
-    elif keystone_url and not domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = user_domain_name
-    elif not keystone_url and domain_name:
+    auth_url_temps = None
+    user_domain_name_temps = None
+
+    if not keystone_url:
         auth_url_temps = auth_url
-        user_domain_name_temps = domain_name
     else:
-        auth_url_temps = auth_url
+        auth_url_temps = keystone_url
+
+    if  not domain_name :
         user_domain_name_temps = user_domain_name
+    else:
+        user_domain_name_temps = domain_name
+
 
     sess = generate_session(
         auth_url=auth_url_temps,
@@ -102,7 +98,7 @@ def get_project_id(username, password, keystone_url=None, domain_name=None):
     project_list = [
         t.id for t in keystone.projects.list(user=sess.get_user_id())
     ]
-    
+
     return project_list[0]
 
 
@@ -129,7 +125,6 @@ def do_login(keystone_url=None, domain_name=None):
             domain_name_env = os.environ.get('OS_USER_DOMAIN_NAME')
             auth_name_env = os.environ.get('OS_AUTH_URL')
             project_id = get_project_id(username, password, keystone_url=auth_name_env, domain_name=domain_name_env)
-
             set_session(collect_session_values(username, password, project_id))
             utils.log_info("Login Success")
             return True
@@ -172,20 +167,18 @@ def do_logout():
 
 
 def collect_session_values(username, password, project_id, keystone_url=None, domain_name=None):
+    auth_url_temps = None
+    user_domain_name_temps = None
 
-    if keystone_url and domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = domain_name
-    elif keystone_url and not domain_name:
-        auth_url_temps = keystone_url
-        user_domain_name_temps = user_domain_name
-    elif not keystone_url and domain_name:
+    if not keystone_url:
         auth_url_temps = auth_url
-        user_domain_name_temps = domain_name
     else:
-        auth_url_temps = auth_url
-        user_domain_name_temps = user_domain_name
+        auth_url_temps = keystone_url
 
+    if  not domain_name :
+        user_domain_name_temps = user_domain_name
+    else:
+        user_domain_name_temps = domain_name
 
     sess = generate_session(
         auth_url=auth_url_temps,
