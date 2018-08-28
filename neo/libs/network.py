@@ -15,8 +15,8 @@ def get_list(session=None):
     return networks['networks']
 
 
-def get_floatingips():
-    neutron = get_neutron_client(None)
+def get_floatingips(session=None):
+    neutron = get_neutron_client(session)
     floatingips = neutron.list_floatingips()
     return floatingips['floatingips']
 

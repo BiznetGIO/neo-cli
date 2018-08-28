@@ -12,8 +12,8 @@ class Log(Base):
         log vm <VM_ID>
 
     Options:
-    -h --help                             Print usage
-    -l limit --limit=LIMIT                   Print outputs from  line  page
+    -h --help                    Print usage
+    -l limit --limit=LIMIT       Print outputs from  line  page [default: 30]
     """
 
 
@@ -36,6 +36,11 @@ class Log(Base):
                        utils.log_err('VM not found') 
                 else:
                     utils.log_err("Can't find neo.yml manifest file!")
+            else:
+                vm_data = vm_lib.get_list()
+                for vm in vm_data:
+                    if (instance_id == vm.name) or (instance_id == vm.id):
+                        instance_id = vm.id
             try:
                 utils.log_info(vm_lib.get_console_logs(instance_id, length=limit))
             except Exception as err:
