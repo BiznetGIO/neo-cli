@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from keystoneclient.v3 import client
-from neo.libs import utils
+from neo.libs import utils 
 
 home = os.path.expanduser("~")
 auth_url = 'https://keystone.wjv-1.neo.id:443/v3'
@@ -61,15 +61,6 @@ def create_env_file(username, password, project_id, keystone_url=None, domain_na
         return False
 
 
-def add_token(token):
-    try:
-        env_file = open("{}/.neo.env".format(home), "a+")
-        env_file.write("OS_TOKEN=%s\n" % token)
-        env_file.close()
-    except:
-        return False
-
-
 def load_env_file():
     return load_dotenv("{}/.neo.env".format(home), override=True)
 
@@ -118,18 +109,38 @@ def do_login(keystone_url=None, domain_name=None):
     try:
         # don't prompt user if .neo.env exist
         if check_env():
-            print("Retrieving last login info ...")
-            load_env_file()
-            username = os.environ.get('OS_USERNAME')
-            password = os.environ.get('OS_PASSWORD')
-            domain_name_env = os.environ.get('OS_USER_DOMAIN_NAME')
-            auth_name_env = os.environ.get('OS_AUTH_URL')
-            project_id = get_project_id(username, password, keystone_url=auth_name_env, domain_name=domain_name_env)
-            set_session(collect_session_values(username, password, project_id))
-            utils.log_info("Login Success")
+            question = utils.question("Your Old Config Detected! Remove Env File")
+
+            if question:
+                if not domain_name:
+                    domain_name = user_domain_name
+                else:
+                    domain_name = domain_name
+                username = get_username()
+                password = get_password()
+                project_id = get_project_id(username, password, keystone_url=keystone_url, domain_name=domain_name)
+                sess = collect_session_values(
+                    username, password,
+                    project_id,
+                    keystone_url=keystone_url,
+                    domain_name=domain_name)
+                set_session(sess)
+
+                create_env_file(username, password, project_id, keystone_url=keystone_url, domain_name=domain_name)
+                utils.log_info("Login Success")
+            else:
+                load_env_file()
+                username = os.environ.get('OS_USERNAME')
+                password = os.environ.get('OS_PASSWORD')
+                domain_name_env = os.environ.get('OS_USER_DOMAIN_NAME')
+                auth_name_env = os.environ.get('OS_AUTH_URL')
+                project_id = get_project_id(username, password, keystone_url=auth_name_env, domain_name=domain_name_env)
+                set_session(collect_session_values(username, password, project_id))
+                utils.log_info("Login Success")
             return True
         else:
-            print("You don't have last login info")
+            utils.log_warn("You don't have last login info !!")
+
             if not domain_name:
                 domain_name = user_domain_name
             else:
