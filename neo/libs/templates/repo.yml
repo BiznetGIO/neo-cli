@@ -3,6 +3,10 @@ clusters:
     url: "git+https://github.com/BiznetGIO/neo-heat-kubernetes.git"
     description: "Template that installs a kubernetes cluster resource group and a master node."
     parameters:
+      key_name:
+        type: string
+        label: Key Name
+        description: Key name
       image:
         type: string
         label: Image name
