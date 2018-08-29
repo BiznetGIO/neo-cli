@@ -3,10 +3,6 @@ clusters:
     url: "git+https://github.com/BiznetGIO/neo-heat-kubernetes.git"
     description: "Template that installs a kubernetes cluster resource group and a master node."
     parameters:
-      key_name:
-        type: string
-        label: Key Name
-        description: Key name
       image:
         type: string
         label: Image name
@@ -99,6 +95,10 @@ instances:
     url: "git+https://github.com/BiznetGIO/neo-heat-plesk.git"
     description: "Create Plesk Bundle"
     parameters:
+      key_name:
+        type: string
+        label: Key Name
+        description: Key name
       private_network:
         type: string
         label: Private Network
