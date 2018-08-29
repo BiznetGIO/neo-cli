@@ -45,8 +45,10 @@ class Login(Base):
                 auth_url = self.args['--keystone-url']
             except Exception as e:
                 auth_url = None
+
             try:
                 domain_url = self.args['--domain']
             except Exception as e:
                 domain_url = None
-                login_lib.do_login(keystone_url=auth_url, domain_name=domain_url)
+
+            login_lib.do_login(keystone_url=auth_url, domain_name=domain_url)
