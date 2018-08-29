@@ -71,7 +71,7 @@ def get_env_values():
     neo_env['password'] = os.environ.get('OS_PASSWORD')
     neo_env['auth_url'] = os.environ.get('OS_AUTH_URL')
     neo_env['project_id'] = os.environ.get('OS_PROJECT_ID')
-    neo_env['domain_namei'] = os.environ.get('OS_USER_DOMAIN_NAME')
+    neo_env['domain_name'] = os.environ.get('OS_USER_DOMAIN_NAME')
     return neo_env
 
 
