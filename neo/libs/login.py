@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from keystoneclient.v3 import client
-from neo.libs import utils 
+from neo.libs import utils
 
 GLOBAL_HOME = os.path.expanduser("~")
 GLOBAL_AUTH_URL = 'https://keystone.wjv-1.neo.id:443/v3'
@@ -34,7 +34,8 @@ def check_env():
     return os.path.isfile("{}/.neo.env".format(home))
 
 
-def create_env_file(username, password, project_id, keystone_url=None, domain_name=None):
+def create_env_file(username, password, project_id, keystone_url=None,
+                    domain_name=None):
     auth_url_temps = None
     user_domain_name_temps = None
 
@@ -43,7 +44,7 @@ def create_env_file(username, password, project_id, keystone_url=None, domain_na
     else:
         auth_url_temps = keystone_url
 
-    if  not domain_name :
+    if not domain_name:
         user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
     else:
         user_domain_name_temps = domain_name
@@ -74,11 +75,10 @@ def get_project_id(username, password, keystone_url=None, domain_name=None):
     else:
         auth_url_temps = keystone_url
 
-    if  not domain_name :
+    if not domain_name:
         user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
     else:
         user_domain_name_temps = domain_name
-
 
     sess = generate_session(
         auth_url=auth_url_temps,
@@ -118,7 +118,9 @@ def do_login(keystone_url=None, domain_name=None):
                     domain_name = domain_name
                 username = get_username()
                 password = get_password()
-                project_id = get_project_id(username, password, keystone_url=keystone_url, domain_name=domain_name)
+                project_id = get_project_id(username, password,
+                                            keystone_url=keystone_url,
+                                            domain_name=domain_name)
                 sess = collect_session_values(
                     username, password,
                     project_id,
@@ -126,7 +128,9 @@ def do_login(keystone_url=None, domain_name=None):
                     domain_name=domain_name)
                 set_session(sess)
 
-                create_env_file(username, password, project_id, keystone_url=keystone_url, domain_name=domain_name)
+                create_env_file(username, password,
+                                project_id, keystone_url=keystone_url,
+                                domain_name=domain_name)
                 utils.log_info("Login Success")
             else:
                 load_env_file()
@@ -134,7 +138,9 @@ def do_login(keystone_url=None, domain_name=None):
                 password = os.environ.get('OS_PASSWORD')
                 domain_name_env = os.environ.get('OS_USER_DOMAIN_NAME')
                 auth_name_env = os.environ.get('OS_AUTH_URL')
-                project_id = get_project_id(username, password, keystone_url=auth_name_env, domain_name=domain_name_env)
+                project_id = get_project_id(username, password,
+                                            keystone_url=auth_name_env,
+                                            domain_name=domain_name_env)
                 set_session(collect_session_values(username, password, project_id))
                 utils.log_info("Login Success")
             return True
@@ -149,7 +155,9 @@ def do_login(keystone_url=None, domain_name=None):
             username = get_username()
             password = get_password()
 
-            project_id = get_project_id(username, password, keystone_url=keystone_url, domain_name=domain_name)
+            project_id = get_project_id(username, password,
+                                        keystone_url=keystone_url,
+                                        domain_name=domain_name)
 
             sess = collect_session_values(
                 username, password,
@@ -158,7 +166,9 @@ def do_login(keystone_url=None, domain_name=None):
                 domain_name=domain_name)
             set_session(sess)
 
-            create_env_file(username, password, project_id, keystone_url=keystone_url, domain_name=domain_name)
+            create_env_file(username, password,
+                            project_id, keystone_url=keystone_url,
+                            domain_name=domain_name)
             utils.log_info("Login Success")
             return True
     except Exception as e:
@@ -171,13 +181,15 @@ def do_logout():
     if check_session():
         os.remove('/tmp/session.pkl')
         remove_env = input("Remove Env File ? y=Yes, press other key to continue: ")
-        if remove_env=='y':
-            os.remove(GLOBAL_HOME +'/.neo.env')
+        if remove_env == 'y':
+            os.remove(GLOBAL_HOME + '/.neo.env')
             utils.log_warn("Env File Removed")
         utils.log_info("Logout Success")
 
 
-def collect_session_values(username, password, project_id, keystone_url=None, domain_name=None):
+def collect_session_values(username, password,
+                           project_id, keystone_url=None,
+                           domain_name=None):
     auth_url_temps = None
     user_domain_name_temps = None
 
@@ -186,7 +198,7 @@ def collect_session_values(username, password, project_id, keystone_url=None, do
     else:
         auth_url_temps = keystone_url
 
-    if  not domain_name :
+    if not domain_name:
         user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
     else:
         user_domain_name_temps = domain_name
