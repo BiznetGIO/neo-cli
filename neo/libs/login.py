@@ -64,6 +64,16 @@ def create_env_file(username, password, project_id, keystone_url=None, domain_na
 def load_env_file():
     return load_dotenv("{}/.neo.env".format(home), override=True)
 
+def get_env_values():
+    load_env_file()
+    neo_env = {}
+    neo_env['username'] =  os.environ.get('OS_USERNAME')
+    neo_env['password'] = os.environ.get('OS_PASSWORD')
+    neo_env['auth_url'] = os.environ.get('OS_AUTH_URL')
+    neo_env['project_id'] = os.environ.get('OS_PROJECT_ID')
+    neo_env['domain_namei'] = os.environ.get('OS_USER_DOMAIN_NAME')
+    return neo_env
+
 
 def get_project_id(username, password, keystone_url=None, domain_name=None):
     auth_url_temps = None
