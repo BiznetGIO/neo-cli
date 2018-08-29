@@ -31,7 +31,7 @@ def generate_session(auth_url, username, password, **kwargs):
 
 
 def check_env():
-    return os.path.isfile("{}/.neo.env".format(home))
+    return os.path.isfile("{}/.neo.env".format(GLOBAL_HOME))
 
 
 def create_env_file(username, password, project_id, keystone_url=None,
