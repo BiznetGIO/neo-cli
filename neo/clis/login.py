@@ -17,13 +17,12 @@ class Login(Base):
     """
 
     def execute(self):
-        try:
-            auth_url = self.args['--keystone-url']
-        except Exception as e:
-            auth_url = None
-        try:
-            domain_url = self.args['--domain']
-        except Exception as e:
-            domain_url = None
+        if self.args["--domain"] and self.args["--keystone-url"]:
+            try:
+                auth_url = self.args['--keystone-url']
+                domain_url = self.args['--domain']
+                login_lib.do_login(auth_url, domain_url)
+            except Exception as e:
+                utils.log_err(e)
 
-        login_lib.do_login(keystone_url=auth_url, domain_name=domain_url)
+        return login_lib.do_login()
