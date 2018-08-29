@@ -100,11 +100,6 @@ instances:
         label: Private Network
         description: Setup Private network
         dependences: "repo:networks.private"
-      key_name:
-        type: string
-        label: Key Name
-        description: Key name
-        dependences: "repo:others.key-pairs"
       image:
         type: string
         label: Image name or ID
