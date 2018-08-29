@@ -58,7 +58,8 @@ def create_env_file(username, password, project_id, keystone_url=None,
         env_file.write("OS_USER_DOMAIN_NAME=%s\n" % user_domain_name_temps)
         env_file.close()
         return True
-    except:
+    except Exception as e:
+        utils.log_err(e)
         return False
 
 
