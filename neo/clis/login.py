@@ -20,7 +20,6 @@ class Login(Base):
 
     def execute(self):
         if self.args["--describe"]:
-            print(self.args)
             envs = login_lib.get_env_values()
             env_data = [[
                 envs['username'],
@@ -43,12 +42,10 @@ class Login(Base):
 
         if self.args["--domain"] and self.args["--keystone-url"]:
             try:
-                print('a')
                 auth_url = self.args['--keystone-url']
             except Exception as e:
                 auth_url = None
             try:
-                print('b')
                 domain_url = self.args['--domain']
             except Exception as e:
                 domain_url = None
