@@ -2,20 +2,18 @@ from neo.clis.base import Base
 from neo.libs import login as login_lib
 
 
-class Login(Base): 
+class Login(Base):
     """
-    usage:
+    Usage:
         login
         login [-u KEYSTONE-URL] [-d DOMAIN]
 
-    List all stack
 
     Options:
-    -h --help                                                     Print usage
-    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL                   Set neo manifest file
-    -d DOMAIN --domain=DOMAIN                                     Print outputs from stack name
+    -h --help                                             Print usage
+    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL           Set your desired keystone URL
+    -d DOMAIN --domain=DOMAIN                             Set your desired domain URL
 
-    Log in to Neo Cloud
     """
 
     def execute(self):
