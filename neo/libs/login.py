@@ -82,7 +82,7 @@ def get_tenant_id(username, password, domain_name=None):
     print(keystone.users.get(user_id))
 
 
-def do_login(auth_url=None, domain_name=None):
+def do_login(keystone_url=None, domain_name=None):
     try:
         # don't prompt user if .neo.env exist
         if check_env():
