@@ -24,3 +24,23 @@ def get_floatingips(session=None):
 def do_delete(network_id, session=None):
     neutron = get_neutron_client(session)
     neutron.delete_network(network_id)
+
+
+def list_sec_group(session=None):
+    neutron = get_neutron_client(session)
+    sec_group =  neutron.list_security_groups()
+    return sec_group['security_groups']
+
+
+def rules_sec_groups(sec_group, session=None):
+    obj = list()
+    neutron = get_neutron_client(session)
+    sec_group =  neutron.list_security_groups()
+    sec_group = sec_group['security_groups']
+    for i in sec_group:
+        data = {
+            'name': i['name'],
+            'description': i['description']
+        }
+        obj.append(data)
+    return obj
