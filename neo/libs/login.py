@@ -34,28 +34,16 @@ def check_env():
     return os.path.isfile("{}/.neo.env".format(GLOBAL_HOME))
 
 
-def create_env_file(username, password, project_id, keystone_url=None,
-                    domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = GLOBAL_AUTH_URL
-    else:
-        auth_url_temps = keystone_url
-
-    if not domain_name:
-        user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
-    else:
-        user_domain_name_temps = domain_name
-
+def create_env_file(username, password, project_id,
+                    auth_url=GLOBAL_AUTH_URL,
+                    domain_name=GLOBAL_USER_DOMAIN_NAME):
     try:
         env_file = open("{}/.neo.env".format(GLOBAL_HOME), "w+")
         env_file.write("OS_USERNAME=%s\n" % username)
         env_file.write("OS_PASSWORD=%s\n" % password)
-        env_file.write("OS_AUTH_URL=%s\n" % auth_url_temps)
+        env_file.write("OS_AUTH_URL=%s\n" % auth_url)
         env_file.write("OS_PROJECT_ID=%s\n" % project_id)
-        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % user_domain_name_temps)
+        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % domain_name)
         env_file.close()
         return True
     except Exception as e:
@@ -67,25 +55,13 @@ def load_env_file():
     return load_dotenv("{}/.neo.env".format(GLOBAL_HOME), override=True)
 
 
-def get_project_id(username, password, keystone_url=None, domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = GLOBAL_AUTH_URL
-    else:
-        auth_url_temps = keystone_url
-
-    if not domain_name:
-        user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
-    else:
-        user_domain_name_temps = domain_name
-
+def get_project_id(username, password, auth_url=GLOBAL_AUTH_URL,
+                   domain_name=GLOBAL_USER_DOMAIN_NAME):
     sess = generate_session(
-        auth_url=auth_url_temps,
+        auth_url=auth_url,
         username=username,
         password=password,
-        user_domain_name=user_domain_name_temps)
+        user_domain_name=domain_name)
     keystone = client.Client(session=sess)
     project_list = [
         t.id for t in keystone.projects.list(user=sess.get_user_id())
@@ -106,7 +82,7 @@ def get_tenant_id(username, password, domain_name=None):
     print(keystone.users.get(user_id))
 
 
-def do_login(keystone_url=None, domain_name=None):
+def do_login(auth_url=None, domain_name=None):
     try:
         # don't prompt user if .neo.env exist
         if check_env():
@@ -120,7 +96,7 @@ def do_login(keystone_url=None, domain_name=None):
                 username = get_username()
                 password = get_password()
                 project_id = get_project_id(username, password,
-                                            keystone_url=keystone_url,
+                                            auth_url=keystone_url,
                                             domain_name=domain_name)
                 sess = collect_session_values(
                     username, password,
@@ -189,26 +165,13 @@ def do_logout():
 
 
 def collect_session_values(username, password,
-                           project_id, keystone_url=None,
-                           domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = GLOBAL_AUTH_URL
-    else:
-        auth_url_temps = keystone_url
-
-    if not domain_name:
-        user_domain_name_temps = GLOBAL_USER_DOMAIN_NAME
-    else:
-        user_domain_name_temps = domain_name
-
+                           project_id, auth_url=GLOBAL_AUTH_URL,
+                           domain_name=GLOBAL_USER_DOMAIN_NAME):
     sess = generate_session(
-        auth_url=auth_url_temps,
+        auth_url=auth_url,
         username=username,
         password=password,
-        user_domain_name=user_domain_name_temps,
+        user_domain_name=domain_name,
         project_id=project_id,
         reauthenticate=True,
         include_catalog=True)
