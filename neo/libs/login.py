@@ -103,18 +103,6 @@ def get_project_id(username, password, keystone_url=None, domain_name=None):
     return project_list[0]
 
 
-def get_tenant_id(username, password, domain_name=None):
-    sess = generate_session(
-        auth_url=auth_url,
-        username=username,
-        password=password,
-        user_domain_name=domain_name)
-    keystone = client.Client(session=sess)
-    user_id = sess.get_user_id()
-    print(dir(keystone.tenant_name))
-    print(keystone.users.get(user_id))
-
-
 def do_login(keystone_url=None, domain_name=None):
     try:
         # don't prompt user if .neo.env exist
