@@ -1,6 +1,8 @@
 from neo.clis.base import Base
 from neo.libs import login as login_lib
+from neo.libs import utils
 from tabulate import tabulate
+
 
 class Login(Base):
     """
@@ -38,7 +40,6 @@ class Login(Base):
                              "Domain Name"],
                     tablefmt="grid"))
             exit()
-
 
         if self.args["--domain"] and self.args["--keystone-url"]:
             try:
