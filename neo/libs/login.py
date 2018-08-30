@@ -34,30 +34,19 @@ def check_env():
     return os.path.isfile("{}/.neo.env".format(home))
 
 
-def create_env_file(username, password, project_id, keystone_url=None, domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = auth_url
-    else:
-        auth_url_temps = keystone_url
-
-    if  not domain_name :
-        user_domain_name_temps = user_domain_name
-    else:
-        user_domain_name_temps = domain_name
-
+def create_env_file(username, password, project_id,
+                    auth_url, domain_name):
     try:
-        env_file = open("{}/.neo.env".format(home), "w+")
+        env_file = open("{}/.neo.env".format(GLOBAL_HOME), "w+")
         env_file.write("OS_USERNAME=%s\n" % username)
         env_file.write("OS_PASSWORD=%s\n" % password)
-        env_file.write("OS_AUTH_URL=%s\n" % auth_url_temps)
+        env_file.write("OS_AUTH_URL=%s\n" % auth_url)
         env_file.write("OS_PROJECT_ID=%s\n" % project_id)
-        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % user_domain_name_temps)
+        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % domain_name)
         env_file.close()
         return True
-    except:
+    except Exception as e:
+        utils.log_err(e)
         return False
 
 
@@ -75,26 +64,12 @@ def get_env_values():
     return neo_env
 
 
-def get_project_id(username, password, keystone_url=None, domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = auth_url
-    else:
-        auth_url_temps = keystone_url
-
-    if  not domain_name :
-        user_domain_name_temps = user_domain_name
-    else:
-        user_domain_name_temps = domain_name
-
-
+def get_project_id(username, password, auth_url, domain_name):
     sess = generate_session(
-        auth_url=auth_url_temps,
+        auth_url=auth_url,
         username=username,
         password=password,
-        user_domain_name=user_domain_name_temps)
+        user_domain_name=domain_name)
     keystone = client.Client(session=sess)
     project_list = [
         t.id for t in keystone.projects.list(user=sess.get_user_id())
