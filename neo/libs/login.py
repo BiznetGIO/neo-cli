@@ -124,7 +124,7 @@ def do_login(username=None, auth_url=GLOBAL_AUTH_URL,
         if check_env():
             if is_current_env(auth_url, user_domain_name,
                               username):
-                utils.log_info("You are already in current account")
+                print("You are already in current account")
             else:
                 print("Doing fresh login. You switched user account")
                 do_fresh_login()
