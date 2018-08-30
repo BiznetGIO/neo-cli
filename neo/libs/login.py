@@ -20,16 +20,26 @@ def get_password():
     return getpass.getpass("password: ")
 
 
-def generate_session(username, password,
-                     auth_url, user_domain_name, project_id=None):
+# def generate_session(username, password,
+#                      auth_url, user_domain_name, project_id=None):
+#     auth = v3.Password(
+#         username=username,
+#         password=password,
+#         project_id=project_id,
+#         auth_url=auth_url,
+#         user_domain_name=user_domain_name,
+#         reauthenticate=True,
+#         include_catalog=True)
+#     sess = session.Session(auth=auth)
+#     dump_session(sess)
+#     return sess
+
+def generate_session(auth_url, username, password, **kwargs):
     auth = v3.Password(
+        auth_url=auth_url,
         username=username,
         password=password,
-        project_id=project_id,
-        auth_url=auth_url,
-        user_domain_name=user_domain_name,
-        reauthenticate=True,
-        include_catalog=True)
+        **kwargs)
     sess = session.Session(auth=auth)
     dump_session(sess)
     return sess
@@ -107,11 +117,14 @@ def do_fresh_login(auth_url=GLOBAL_AUTH_URL,
         project_id = get_project_id(username, password,
                                     auth_url, user_domain_name)
         # generate fresh session
-        generate_session(username, password,
-                         project_id, auth_url, user_domain_name)
+        generate_session(auth_url=auth_url, username=username,
+                         password=password, project_id=project_id,
+                         user_domain_name=user_domain_name,
+                         reauthenticate=True, include_catalog=True)
         # generate fresh neo.env
         create_env_file(username, password, project_id,
                         auth_url, user_domain_name)
+        load_env_file()
         utils.log_info("Login Success")
     except Exception as e:
         utils.log_err(e)
