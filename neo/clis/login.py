@@ -11,10 +11,10 @@ class Login(Base):
 
 
     Options:
-    -h --help                                             Print usage
-    -D --describe                                         Set your desired domain URL
-    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL           Set your desired keystone URL
-    -d DOMAIN --domain=DOMAIN                             Set your desired domain URL
+    -h --help                                       Print usage
+    -D --describe                                   Set your desired domain URL
+    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL     Set your desired keystone URL
+    -d DOMAIN --domain=DOMAIN                       Set your desired domain URL
 
     """
 
