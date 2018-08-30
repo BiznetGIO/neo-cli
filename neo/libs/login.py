@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from keystoneclient.v3 import client
-from neo.libs import utils 
+from neo.libs import utils
 
 GLOBAL_HOME = os.path.expanduser("~")
 GLOBAL_AUTH_URL = 'https://keystone.wjv-1.neo.id:443/v3'
