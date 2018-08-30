@@ -113,25 +113,41 @@ def do_fresh_login(auth_url=GLOBAL_AUTH_URL,
         # generate fresh neo.env
         create_env_file(username, password, project_id,
                         auth_url, user_domain_name)
-        load_env_file()
         utils.log_info("Login Success")
     except Exception as e:
         utils.log_err(e)
         utils.log_err("Login Failed")
 
 
-def do_login(username=None, auth_url=GLOBAL_AUTH_URL,
-             user_domain_name=GLOBAL_USER_DOMAIN_NAME):
+def regenerate_sess():
+    """ Regenerate session from old neo.env"""
+    env_data = get_env_values()
+    generate_session(auth_url=env_data['auth_url'],
+                     username=env_data['username'],
+                     password=env_data['password'],
+                     project_id=env_data['project_id'],
+                     user_domain_name=env_data['user_domain_name'])
+
+
+def do_login(auth_url=GLOBAL_AUTH_URL,
+             user_domain_name=GLOBAL_USER_DOMAIN_NAME, **username):
     try:
-        if check_env():
+        if check_env() and check_session():
+            old_env_data = get_env_values()
             if is_current_env(auth_url, user_domain_name,
-                              username):
-                print("You are already in current account")
+                              username=old_env_data['username']):
+                print("You are already logged.")
+                print("  use 'neo login -D' to see your current account")
             else:
                 print("Doing fresh login. You switched user account")
-                do_fresh_login()
+                do_fresh_login(auth_url=auth_url,
+                               user_domain_name=user_domain_name)
+        elif check_env() and not check_session():
+            print("Retrieving old login data ...")
+            regenerate_sess()
+            utils.log_info("Login Success")
         else:
-            print("Doing fresh login. You don't have neo.env file")
+            print("Doing fresh login. You don't have old login data")
             do_fresh_login()
     except Exception as e:
         utils.log_err(e)
