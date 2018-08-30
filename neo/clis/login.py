@@ -15,9 +15,9 @@ class Login(Base):
     Options:
     -h --help                                       Print usage
     -D --describe                                   Set your desired domain URL
-    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL     Set your desired keystone URL
+    -k KEYSTONE-URL --keystone-url=KEYSTONE-URL     Set your desired keystone URL
     -d DOMAIN --domain=DOMAIN                       Set your desired domain URL
-
+    -u USERNAME --user=USERNAME                     Set your desired username
     """
 
     def execute(self):
@@ -43,9 +43,11 @@ class Login(Base):
 
         if self.args["--domain"] and self.args["--keystone-url"]:
             try:
-                auth_url = self.args['--keystone-url']
-                domain_url = self.args['--domain']
-                login_lib.do_login(auth_url, domain_url)
+                custom_auth_url = self.args['--keystone-url']
+                custom_domain_url = self.args['--domain']
+                username = self.args['--user']
+                login_lib.do_login(custom_auth_url, custom_domain_url,
+                                   username)
             except Exception as e:
                 utils.log_err(e)
 
