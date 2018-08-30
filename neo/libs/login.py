@@ -187,29 +187,19 @@ def do_logout():
         utils.log_info("Logout Success")
 
 
-def collect_session_values(username, password, project_id, keystone_url=None, domain_name=None):
-    auth_url_temps = None
-    user_domain_name_temps = None
-
-    if not keystone_url:
-        auth_url_temps = auth_url
-    else:
-        auth_url_temps = keystone_url
-
-    if  not domain_name :
-        user_domain_name_temps = user_domain_name
-    else:
-        user_domain_name_temps = domain_name
-
+def collect_session_values(username, password,
+                           project_id, auth_url=GLOBAL_AUTH_URL,
+                           domain_name=GLOBAL_USER_DOMAIN_NAME):
     sess = generate_session(
-        auth_url=auth_url_temps,
+        auth_url=auth_url,
         username=username,
         password=password,
-        user_domain_name=user_domain_name_temps,
+        user_domain_name=domain_name,
         project_id=project_id,
         reauthenticate=True,
         include_catalog=True)
     return sess
+
 
 
 def set_session(sess):
