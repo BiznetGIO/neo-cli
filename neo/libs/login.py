@@ -54,14 +54,17 @@ def load_env_file():
     return load_dotenv("{}/.neo.env".format(home), override=True)
 
 def get_env_values():
-    load_env_file()
-    neo_env = {}
-    neo_env['username'] =  os.environ.get('OS_USERNAME')
-    neo_env['password'] = os.environ.get('OS_PASSWORD')
-    neo_env['auth_url'] = os.environ.get('OS_AUTH_URL')
-    neo_env['project_id'] = os.environ.get('OS_PROJECT_ID')
-    neo_env['domain_name'] = os.environ.get('OS_USER_DOMAIN_NAME')
-    return neo_env
+    if check_env():
+        load_env_file()
+        neo_env = {}
+        neo_env['username'] = os.environ.get('OS_USERNAME')
+        neo_env['password'] = os.environ.get('OS_PASSWORD')
+        neo_env['auth_url'] = os.environ.get('OS_AUTH_URL')
+        neo_env['project_id'] = os.environ.get('OS_PROJECT_ID')
+        neo_env['domain_name'] = os.environ.get('OS_USER_DOMAIN_NAME')
+        return neo_env
+    else:
+        utils.log_err("Can't find neo.env")
 
 
 def get_project_id(username, password, auth_url, domain_name):
