@@ -227,8 +227,9 @@ def get_session():
             sess = dill.load(f)
         return sess
     except Exception as e:
-        do_login()
-        return get_session()
+        utils.log_err("Loading Session Failed")
+        utils.log_err("Please login first")
+        utils.log_err(e)
 
 
 def check_session():
