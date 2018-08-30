@@ -20,13 +20,18 @@ def get_password():
     return getpass.getpass("password: ")
 
 
-def generate_session(auth_url, username, password, **kwargs):
+def generate_session(username, password,
+                     auth_url, user_domain_name, project_id=None):
     auth = v3.Password(
-        auth_url=auth_url,
         username=username,
         password=password,
-        **kwargs)
+        project_id=project_id,
+        auth_url=auth_url,
+        user_domain_name=user_domain_name,
+        reauthenticate=True,
+        include_catalog=True)
     sess = session.Session(auth=auth)
+    dump_session(sess)
     return sess
 
 
@@ -35,14 +40,14 @@ def check_env():
 
 
 def create_env_file(username, password, project_id,
-                    auth_url, domain_name):
+                    auth_url, user_domain_name):
     try:
         env_file = open("{}/.neo.env".format(GLOBAL_HOME), "w+")
         env_file.write("OS_USERNAME=%s\n" % username)
         env_file.write("OS_PASSWORD=%s\n" % password)
         env_file.write("OS_AUTH_URL=%s\n" % auth_url)
         env_file.write("OS_PROJECT_ID=%s\n" % project_id)
-        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % domain_name)
+        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % user_domain_name)
         env_file.close()
         return True
     except Exception as e:
@@ -51,7 +56,8 @@ def create_env_file(username, password, project_id,
 
 
 def load_env_file():
-    return load_dotenv("{}/.neo.env".format(home), override=True)
+    return load_dotenv("{}/.neo.env".format(GLOBAL_HOME), override=True)
+
 
 def get_env_values():
     if check_env():
@@ -61,18 +67,29 @@ def get_env_values():
         neo_env['password'] = os.environ.get('OS_PASSWORD')
         neo_env['auth_url'] = os.environ.get('OS_AUTH_URL')
         neo_env['project_id'] = os.environ.get('OS_PROJECT_ID')
-        neo_env['domain_name'] = os.environ.get('OS_USER_DOMAIN_NAME')
+        neo_env['user_domain_name'] = os.environ.get('OS_USER_DOMAIN_NAME')
         return neo_env
     else:
         utils.log_err("Can't find neo.env")
 
 
-def get_project_id(username, password, auth_url, domain_name):
+def is_current_env(auth_url, user_domain_name, username):
+    """ check if auth_url and user_domain_name differ from current .neo.env"""
+    envs = get_env_values()
+    if (envs['auth_url'] == auth_url and
+        envs['user_domain_name'] == user_domain_name and
+            envs['username'] == username):
+        return True
+    else:
+        return False
+
+
+def get_project_id(username, password, auth_url, user_domain_name):
     sess = generate_session(
-        auth_url=auth_url,
         username=username,
         password=password,
-        user_domain_name=domain_name)
+        auth_url=auth_url,
+        user_domain_name=user_domain_name)
     keystone = client.Client(session=sess)
     project_list = [
         t.id for t in keystone.projects.list(user=sess.get_user_id())
@@ -81,62 +98,39 @@ def get_project_id(username, password, auth_url, domain_name):
     return project_list[0]
 
 
-def do_login(keystone_url=None, domain_name=None):
+def do_fresh_login(auth_url=GLOBAL_AUTH_URL,
+                   user_domain_name=GLOBAL_USER_DOMAIN_NAME):
     try:
-        # don't prompt user if .neo.env exist
+        username = get_username()
+        password = get_password()
+        # use default value for fresh login
+        project_id = get_project_id(username, password,
+                                    auth_url, user_domain_name)
+        # generate fresh session
+        generate_session(username, password,
+                         project_id, auth_url, user_domain_name)
+        # generate fresh neo.env
+        create_env_file(username, password, project_id,
+                        auth_url, user_domain_name)
+        utils.log_info("Login Success")
+    except Exception as e:
+        utils.log_err(e)
+        utils.log_err("Login Failed")
+
+
+def do_login(username=None, auth_url=GLOBAL_AUTH_URL,
+             user_domain_name=GLOBAL_USER_DOMAIN_NAME):
+    try:
         if check_env():
-            question = utils.question("Your Old Config Detected! Remove Env File")
-
-            if question:
-                if not domain_name:
-                    domain_name = user_domain_name
-                else:
-                    domain_name = domain_name
-                username = get_username()
-                password = get_password()
-                project_id = get_project_id(username, password, keystone_url=keystone_url, domain_name=domain_name)
-                sess = collect_session_values(
-                    username, password,
-                    project_id,
-                    keystone_url=keystone_url,
-                    domain_name=domain_name)
-                set_session(sess)
-
-                create_env_file(username, password, project_id, keystone_url=keystone_url, domain_name=domain_name)
-                utils.log_info("Login Success")
+            if is_current_env(auth_url, user_domain_name,
+                              username):
+                utils.log_info("You are already in current account")
             else:
-                load_env_file()
-                username = os.environ.get('OS_USERNAME')
-                password = os.environ.get('OS_PASSWORD')
-                domain_name_env = os.environ.get('OS_USER_DOMAIN_NAME')
-                auth_name_env = os.environ.get('OS_AUTH_URL')
-                project_id = get_project_id(username, password, keystone_url=auth_name_env, domain_name=domain_name_env)
-                set_session(collect_session_values(username, password, project_id))
-                utils.log_info("Login Success")
-            return True
+                print("Doing fresh login. You switched user account")
+                do_fresh_login()
         else:
-            utils.log_warn("You don't have last login info !!")
-
-            if not domain_name:
-                domain_name = user_domain_name
-            else:
-                domain_name = domain_name
-
-            username = get_username()
-            password = get_password()
-
-            project_id = get_project_id(username, password, keystone_url=keystone_url, domain_name=domain_name)
-
-            sess = collect_session_values(
-                username, password,
-                project_id,
-                keystone_url=keystone_url,
-                domain_name=domain_name)
-            set_session(sess)
-
-            create_env_file(username, password, project_id, keystone_url=keystone_url, domain_name=domain_name)
-            utils.log_info("Login Success")
-            return True
+            print("Doing fresh login. You don't have neo.env file")
+            do_fresh_login()
     except Exception as e:
         utils.log_err(e)
         utils.log_err("Login Failed")
@@ -146,37 +140,18 @@ def do_login(keystone_url=None, domain_name=None):
 def do_logout():
     if check_session():
         os.remove('/tmp/session.pkl')
-        remove_env = input("Remove Env File ? y=Yes, press other key to continue: ")
-        if remove_env=='y':
-            os.remove(home+'/.neo.env')
-            utils.log_warn("Env File Removed")
         utils.log_info("Logout Success")
 
 
-def collect_session_values(username, password,
-                           project_id, auth_url=GLOBAL_AUTH_URL,
-                           domain_name=GLOBAL_USER_DOMAIN_NAME):
-    sess = generate_session(
-        auth_url=auth_url,
-        username=username,
-        password=password,
-        user_domain_name=domain_name,
-        project_id=project_id,
-        reauthenticate=True,
-        include_catalog=True)
-    return sess
-
-
-
-def set_session(sess):
+def dump_session(sess):
     try:
         with open('/tmp/session.pkl', 'wb') as f:
             dill.dump(sess, f)
     except Exception as e:
-        utils.log_err("set session failed")
+        utils.log_err("Dump session failed")
 
 
-def get_session():
+def load_dumped_session():
     try:
         sess = None
         with open('/tmp/session.pkl', 'rb') as f:

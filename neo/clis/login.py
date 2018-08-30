@@ -9,7 +9,7 @@ class Login(Base):
     Usage:
         login
         login -D | --describe
-        login [-u KEYSTONE-URL] [-d DOMAIN]
+        login [-u USERNAME] [-k KEYSTONE-URL] [-d DOMAIN]
 
 
     Options:
@@ -43,11 +43,10 @@ class Login(Base):
 
         if self.args["--domain"] and self.args["--keystone-url"]:
             try:
-                custom_auth_url = self.args['--keystone-url']
-                custom_domain_url = self.args['--domain']
                 username = self.args['--user']
-                login_lib.do_login(custom_auth_url, custom_domain_url,
-                                   username)
+                auth_url = self.args['--keystone-url']
+                user_domain_name = self.args['--domain']
+                login_lib.do_login(username, auth_url, user_domain_name)
             except Exception as e:
                 utils.log_err(e)
 
