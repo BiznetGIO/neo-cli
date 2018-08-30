@@ -7,9 +7,9 @@ from keystoneauth1 import session
 from keystoneclient.v3 import client
 from neo.libs import utils 
 
-home = os.path.expanduser("~")
-auth_url = 'https://keystone.wjv-1.neo.id:443/v3'
-user_domain_name = 'neo.id'
+GLOBAL_HOME = os.path.expanduser("~")
+GLOBAL_AUTH_URL = 'https://keystone.wjv-1.neo.id:443/v3'
+GLOBAL_USER_DOMAIN_NAME = 'neo.id'
 
 
 def get_username():
