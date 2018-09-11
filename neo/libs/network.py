@@ -33,7 +33,7 @@ def list_sec_group(session=None):
 
 
 def rules_sec_groups(sec_group, session=None):
-    obj = list()
+    obj_sec_rule = list()
     neutron = get_neutron_client(session)
     sec_group =  neutron.list_security_groups()
     sec_group = sec_group['security_groups']
@@ -42,5 +42,5 @@ def rules_sec_groups(sec_group, session=None):
             'name': i['name'],
             'description': i['description']
         }
-        obj.append(data)
-    return obj
+        obj_sec_rule.append(data)
+    return obj_sec_rule
