@@ -1,21 +1,23 @@
 from neo.clis.base import Base
 from neo.libs import login as login_lib
+from neo.libs import utils
 from tabulate import tabulate
+
 
 class Login(Base):
     """
     Usage:
         login
         login -D | --describe
-        login [-u KEYSTONE-URL] [-d DOMAIN]
+        login [-u USERNAME] [-k KEYSTONE-URL] [-d DOMAIN]
 
 
     Options:
-    -h --help                                             Print usage
-    -D --describe                                         Set your desired domain URL
-    -u KEYSTONE-URL --keystone-url=KEYSTONE-URL           Set your desired keystone URL
-    -d DOMAIN --domain=DOMAIN                             Set your desired domain URL
-
+    -h --help                                       Print usage
+    -D --describe                                   Set your desired domain URL
+    -k KEYSTONE-URL --keystone-url=KEYSTONE-URL     Set your desired keystone URL
+    -d DOMAIN --domain=DOMAIN                       Set your desired domain URL
+    -u USERNAME --username=USERNAME                 Set your desired username
     """
 
     def execute(self):
@@ -25,7 +27,7 @@ class Login(Base):
                 envs['username'],
                 envs['auth_url'],
                 envs['project_id'],
-                envs['domain_name']
+                envs['user_domain_name']
             ]]
             if len(env_data) == 0:
                 utils.log_err("No Data...")
@@ -39,16 +41,16 @@ class Login(Base):
                     tablefmt="grid"))
             exit()
 
-
-        if self.args["--domain"] and self.args["--keystone-url"]:
+        if (self.args["--domain"] and self.args["--keystone-url"]):
             try:
+                username = self.args['--username']
                 auth_url = self.args['--keystone-url']
+                user_domain_name = self.args['--domain']
+                login_lib.do_login(auth_url=auth_url,
+                                   user_domain_name=user_domain_name,
+                                   username=username)
             except Exception as e:
-                auth_url = None
+                utils.log_err(e)
 
-            try:
-                domain_url = self.args['--domain']
-            except Exception as e:
-                domain_url = None
-
-            login_lib.do_login(keystone_url=auth_url, domain_name=domain_url)
+        if (not self.args["--domain"] and not self.args["--keystone-url"]):
+            login_lib.do_login()

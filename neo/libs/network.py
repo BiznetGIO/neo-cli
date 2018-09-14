@@ -4,7 +4,7 @@ from neutronclient.v2_0 import client as neutron_client
 
 def get_neutron_client(session=None):
     if not session:
-        session = login_lib.get_session()
+        session = login_lib.load_dumped_session()
     neutron = neutron_client.Client(session=session)
     return neutron
 

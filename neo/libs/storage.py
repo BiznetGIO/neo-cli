@@ -5,7 +5,7 @@ from cinderclient import client as cinder_client
 
 def get_cinder_client(session=None):
     if not session:
-        session = login_lib.get_session()
+        session = login_lib.load_dumped_session()
 
     storage = cinder_client.Client(2, session=session)
     return storage

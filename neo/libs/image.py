@@ -4,7 +4,7 @@ from glanceclient import Client as image_client
 
 def get_image_client(session=None):
     if not session:
-        session = login_lib.get_session()
+        session = login_lib.load_dumped_session()
     img = image_client('2', session=session)
     return img
 

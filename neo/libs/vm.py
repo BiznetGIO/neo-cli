@@ -4,7 +4,7 @@ from novaclient import client as nova_client
 
 def get_nova_client(session=None):
     if not session:
-        session = login_lib.get_session()
+        session = login_lib.load_dumped_session()
 
     compute = nova_client.Client(2, session=session)
     return compute
