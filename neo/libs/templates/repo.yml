@@ -100,11 +100,6 @@ instances:
         label: Private Network
         description: Setup Private network
         dependences: "repo:networks.private"
-      key_name:
-        type: string
-        label: Key Name
-        description: Key name
-        dependences: "repo:others.key-pairs"
       image:
         type: string
         label: Image name or ID
@@ -141,6 +136,11 @@ instances:
         label: neo description for floating ip
         description: neo description for floating ip
         default: PLSK
+      package:
+        type: string
+        label: plesk package
+        description: plesk package
+        default: wordpress
 
 others:
     key-pairs:

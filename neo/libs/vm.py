@@ -4,7 +4,7 @@ from novaclient import client as nova_client
 
 def get_nova_client(session=None):
     if not session:
-        session = login_lib.get_session()
+        session = login_lib.load_dumped_session()
 
     compute = nova_client.Client(2, session=session)
     return compute
@@ -59,3 +59,14 @@ def suspend(vm_id, session=None):
 def resume(vm_id, session=None):
     compute = get_nova_client(session)
     return compute.servers.resume(vm_id)
+
+
+def lock(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.lock(vm_id)
+
+
+def unlock(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.unlock(vm_id)
+

@@ -9,7 +9,7 @@ import time
 def get_heat_client(session=None):
     try:
         if not session:
-            session = login_lib.get_session()
+            session = login_lib.load_dumped_session()
         heat = heat_client.Client('1', session=session)
         return heat
     except Exception as e:
