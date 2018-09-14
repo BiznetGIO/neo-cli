@@ -59,3 +59,14 @@ def suspend(vm_id, session=None):
 def resume(vm_id, session=None):
     compute = get_nova_client(session)
     return compute.servers.resume(vm_id)
+
+
+def lock(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.lock(vm_id)
+
+
+def unlock(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.unlock(vm_id)
+
