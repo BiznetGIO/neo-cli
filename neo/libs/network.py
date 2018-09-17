@@ -80,3 +80,21 @@ def show_router(routers, session=None):
 def delete_router(routers, session=None):
     neutron = get_neutron_client(session)
     return neutron.delete_router(routers)
+
+
+def list_subnet_pool(session=None):
+    obj_subnetpool_list = list()
+    neutron = get_neutron_client(session)
+    obj_subnetpool_list = neutron.list_subnetpools()
+    return obj_subnetpool_list
+
+
+def show_subnet_pool(subnetpool, session=None):
+    neutron = get_neutron_client(session)
+    obj_subnetpools = neutron.show_subnetpool(routers)
+    return obj_subnetpools
+
+
+def delete_subnet_pool(subnetpool, session=None):
+    neutron = get_neutron_client(session)
+    return neutron.delete_subnetpool(subnetpool)
