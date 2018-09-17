@@ -117,3 +117,23 @@ def pause_instance(vm_id, session=None):
 def unpause_instance(vm_id, session=None):
     compute = get_nova_client(session)
     return compute.servers.unpause(vm_id)
+
+
+def start_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.start(vm_id)
+
+
+def stop_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.stop(vm_id)
+
+
+def reboot_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.reboot(vm_id)
+
+
+def restore_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.restore(vm_id)
