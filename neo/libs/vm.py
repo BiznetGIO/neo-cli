@@ -70,3 +70,36 @@ def unlock(vm_id, session=None):
     compute = get_nova_client(session)
     return compute.servers.unlock(vm_id)
 
+
+def resize(vm_id, flavor, session=None):
+    compute = get_nova_client(session)
+    return compute.resize(id, flavor=flavor)
+
+
+def confirm_size(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.confirm_resize(vm_id)
+
+
+def revert_size(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.revert_resize(vm_id)
+
+
+def attach_interface(vm_id, port_id, net_id, fixed_ip, session=None):
+    compute = get_nova_client(session)
+    attach_ip = compute.servers.interface_attach(
+                        id,
+                        port_id,
+                        net_id,
+                        fixed_ip,
+                        tag=None
+                    )
+    return attach_ip
+
+
+def detach_interface(vm_id, port_id, session=None):
+    compute = get_nova_client(session)
+    detach_ip = compute.servers.interface_detach(vm_id, port_id)
+    return detach_ip
+
