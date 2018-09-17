@@ -103,3 +103,17 @@ def detach_interface(vm_id, port_id, session=None):
     detach_ip = compute.servers.interface_detach(vm_id, port_id)
     return detach_ip
 
+
+def get_vnc_console_url(vm_id, vnc_type, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.get_vnc_console(vm_id, vnc_type)
+
+
+def pause_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.pause(vm_id)
+
+
+def unpause_instance(vm_id, session=None):
+    compute = get_nova_client(session)
+    return compute.servers.unpause(vm_id)
