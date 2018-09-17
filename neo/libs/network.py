@@ -145,3 +145,49 @@ def delete_subnet_pool(subnetpool, session=None):
         utils.log_err(e)
 
 
+def list_port(session=None):
+    obj_port_list = list()
+    neutron = get_neutron_client(session)
+    try:
+        obj_port_list = neutron.list_ports()
+    except Exception as e:
+        utils.log_err(e)
+
+    return obj_port_list
+
+
+def show_port(port, session=None):
+    neutron = get_neutron_client(session)
+    try:
+        obj_port = neutron.show_port(port)
+    except Exception as e:
+        utils.log_err(e)
+    return obj_port
+
+
+def delete_port(port, session=None):
+    neutron = get_neutron_client(session)
+    try:
+        return neutron.delete_port(port)
+    except Exception as e:
+        utils.log_err(e)
+
+
+def show_floatingips(floatingips, session=None):
+    neutron = get_neutron_client(session)
+    try:
+        obj_floatingips = neutron.show_floatingip(floatingips)
+    except Exception as e:
+        utils.log_err(e)
+    return obj_floatingips
+
+
+def delete_floatingip(floatingips, session=None):
+    neutron = get_neutron_client(session)
+    try:
+        return neutron.delete_floatingip(floatingips)
+    except Exception as e:
+        utils.log_err(e)
+
+
+
