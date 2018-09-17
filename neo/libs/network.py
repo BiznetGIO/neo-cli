@@ -44,3 +44,26 @@ def rules_sec_groups(sec_group, session=None):
         }
         obj_sec_rule.append(data)
     return obj_sec_rule
+
+
+def list_subnet(session=None):
+    obj_subnet_list = list()
+    neutron = get_neutron_client(session)
+    obj_subnet_list = neutron.list_subnets()
+    return obj_subnet_list
+
+
+def show_subnet(subnet, session=None):
+    obj_subnet = list()
+    neutron = get_neutron_client(session)
+    obj_subnet = neutron.show_subnet(subnet)
+    return obj_subnet
+
+def delete_subnet(subnet, session):
+    neutron = get_neutron_client(session)
+    return neutron.delete_subnet(subnet)
+
+
+
+
+
