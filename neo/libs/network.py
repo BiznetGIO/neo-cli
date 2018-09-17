@@ -64,6 +64,19 @@ def delete_subnet(subnet, session):
     return neutron.delete_subnet(subnet)
 
 
+def list_router(session=None):
+    obj_router_list = list()
+    neutron = get_neutron_client(session)
+    obj_router_list = neutron.list_routers()
+    return obj_router_list
 
 
+def show_router(routers, session=None):
+    neutron = get_neutron_client(session)
+    obj_router = neutron.show_router(routers)
+    return obj_router
 
+
+def delete_router(routers, session=None):
+    neutron = get_neutron_client(session)
+    return neutron.delete_router(routers)
