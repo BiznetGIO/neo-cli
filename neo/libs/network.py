@@ -92,7 +92,7 @@ def list_subnet_pool(session=None):
 def show_subnet_pool(subnetpool, session=None):
     neutron = get_neutron_client(session)
     obj_subnetpools = neutron.show_subnetpool(subnetpool)
-    return 
+    return obj_subnetpools
 
 
 def delete_subnet_pool(subnetpool, session=None):
