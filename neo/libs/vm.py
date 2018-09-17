@@ -202,3 +202,22 @@ def restore_instance(vm_id, session=None):
         return compute.servers.restore(vm_id)
     except Exception as e:
         utils.log_err(e)
+
+
+def action_logs(vm_id, session=None):
+    compute = get_nova_client(session)
+    log_action = list()
+    try:
+        log_action = compute.instance_action.list(vm_id)
+    except Exception as e:
+        utils.log_err(e)
+    return log_action
+
+def action_logs_show(vm_id, action_id, session=None):
+    compute = get_nova_client(session)
+    detail_action = list()
+    try:
+        detail_action = compute.instance_action.get(vm_id, action_id)
+    except Exception as e:
+        utils.log_err(e)
+    return detail_action
