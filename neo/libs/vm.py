@@ -104,7 +104,7 @@ def unlock(vm_id, session=None):
 def resize(vm_id, flavor, session=None):
     compute = get_nova_client(session)
     try:
-        return compute.resize(id, flavor=flavor)
+        return compute.resize(vm_id, flavor=flavor)
     except Exception as e:
         utils.log_err(e)
 
@@ -129,7 +129,7 @@ def attach_interface(vm_id, port_id, net_id, fixed_ip, session=None):
     compute = get_nova_client(session)
     try:
         attach_ip = compute.servers.interface_attach(
-                        id,
+                        vm_id,
                         port_id,
                         net_id,
                         fixed_ip,
