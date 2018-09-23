@@ -6,6 +6,7 @@ from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from keystoneclient.v3 import client
 from neo.libs import utils
+from time import sleep
 
 GLOBAL_HOME = os.path.expanduser("~")
 GLOBAL_AUTH_URL = 'https://keystone.wjv-1.neo.id:443/v3'
@@ -171,15 +172,21 @@ def dump_session(sess):
 
 def load_dumped_session():
     try:
-        sess = None
-        with open('/tmp/session.pkl', 'rb') as f:
-            sess = dill.load(f)
-        return sess
+        if check_session():
+            sess = None
+            with open('/tmp/session.pkl', 'rb') as f:
+                sess = dill.load(f)
+            return sess
+        else:
+            regenerate_sess()
+            print("You don't have any session data")
+            print("Retrieving old login data ...")
+            utils.log_info("Login Success")
+            return load_dumped_session()
     except Exception as e:
         utils.log_err("Loading Session Failed")
         utils.log_err("Please login first")
         utils.log_err(e)
-
 
 def check_session():
     return os.path.isfile("/tmp/session.pkl")
