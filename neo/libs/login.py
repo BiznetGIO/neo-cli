@@ -179,9 +179,6 @@ def load_dumped_session():
             return sess
         else:
             regenerate_sess()
-            print("You don't have any session data")
-            print("Retrieving old login data ...")
-            utils.log_info("Login Success")
             return load_dumped_session()
     except Exception as e:
         utils.log_err("Loading Session Failed")
