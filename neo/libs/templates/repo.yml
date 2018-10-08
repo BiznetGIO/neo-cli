@@ -7,7 +7,7 @@ clusters:
         type: string
         label: Image name
         description: Image to be used for server. Please use an Centos based image.
-        default: 16f795e6-aa68-4b49-a318-d6de8d1bd8aa
+        default: c8558bd1-9b8c-4ec6-9749-79e9f2bab253
       controller_flavor:
         type: string
         label: Flavor
