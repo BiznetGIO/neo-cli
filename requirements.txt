@@ -4,7 +4,7 @@ python_neutronclient==6.5.0
 prompt_toolkit==1.0.15
 python_glanceclient==2.8.0
 requests==2.18.0
-paramiko==2.4.1
+paramiko==2.4.2
 tabulate==0.8.2
 keystoneauth1==3.8.0
 python_heatclient==1.10.0
