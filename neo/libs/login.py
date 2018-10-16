@@ -171,15 +171,18 @@ def dump_session(sess):
 
 def load_dumped_session():
     try:
-        sess = None
-        with open('/tmp/session.pkl', 'rb') as f:
-            sess = dill.load(f)
-        return sess
+        if check_session():
+            sess = None
+            with open('/tmp/session.pkl', 'rb') as f:
+                sess = dill.load(f)
+            return sess
+        else:
+            regenerate_sess()
+            return load_dumped_session()
     except Exception as e:
         utils.log_err("Loading Session Failed")
         utils.log_err("Please login first")
         utils.log_err(e)
-
 
 def check_session():
     return os.path.isfile("/tmp/session.pkl")
