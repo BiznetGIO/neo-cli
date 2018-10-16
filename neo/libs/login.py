@@ -157,7 +157,9 @@ def do_login(auth_url=GLOBAL_AUTH_URL,
 
 def do_logout():
     if check_session():
+        home = os.path.expanduser("~")
         os.remove('/tmp/session.pkl')
+        os.remove(home+'/.neo.env')
         utils.log_info("Logout Success")
 
 
