@@ -30,11 +30,11 @@ clusters:
         default: Public_Network
       master_size:
         type: number
-        label: Master size
+        label: Number of Kubernetes Master
         description: Number of instances in cluster.
       worker_size:
         type: number
-        label: Worker size
+        label: Number of Kubernetes
         description: Number of instances in cluster.
       private_network:
         type: string
