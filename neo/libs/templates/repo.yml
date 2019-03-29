@@ -38,7 +38,7 @@ clusters:
         description: Number of instances in cluster.
       private_network:
         type: string
-        label: Private Network
+        label: Select your Private Network
         description: Setup Private network
         dependences: "repo:networks.private"
 
