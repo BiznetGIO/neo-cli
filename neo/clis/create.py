@@ -33,8 +33,7 @@ Run 'neo create COMMAND --help' for more information on a command.
 
     def execute(self):
         if self.args["--template"]:
-            if self.args["--template"] in ('clusters', 'instances',
-                                           'networks'):
+            if self.args["--template"] in ("clusters", "instances", "networks"):
                 tmpl = self.args["--template"]
 
                 if self.args["--interactive"]:
@@ -69,8 +68,7 @@ Run 'neo create COMMAND --help' for more information on a command.
 
         if not default_file:
             utils.log_err("Can't find neo.yml manifest file!")
-            q_stack = utils.question(
-                "Do you want to generate neo.yml manifest? ")
+            q_stack = utils.question("Do you want to generate neo.yml manifest? ")
 
             if q_stack:
                 if self.args["--interactive"]:

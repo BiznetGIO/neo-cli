@@ -1,6 +1,7 @@
 from neo.libs import utils
 from neo.libs.lambdafunc import *
 
+
 def get_stack():
     d_stack = utils.get_index(utils.repodata())
     f_stack = [
@@ -8,8 +9,8 @@ def get_stack():
             "type": "TitleSelectOne",
             "name": "Select Stack :",
             "key": "stack",
-            "values": d_stack
-        },
+            "values": d_stack,
+        }
     ]
     stack = utils.form_generator("Stack list", f_stack)
     try:
@@ -25,28 +26,24 @@ def get_project(templates):
             "type": "TitleSelectOne",
             "name": "Select template :",
             "key": "template",
-            "values": d_template
-        },
+            "values": d_template,
+        }
     ]
     template = utils.form_generator("Templates", f_template)
     try:
-        return (d_template[template["template"].value[0]])
+        return d_template[template["template"].value[0]]
     except:
         return None
 
 
 def setup_form(stack, project, parent=None):
     init = {
-        "form": [{
-            "type": "TitleText",
-            "name": "Name",
-            "key": "name"
-        }],
+        "form": [{"type": "TitleText", "name": "Name", "key": "name"}],
         "depend": [],
         "number": [],
         "stack": stack,
         "project": project,
-        "parent": parent
+        "parent": parent,
     }
 
     if parent:
@@ -60,35 +57,31 @@ def setup_form(stack, project, parent=None):
             prop = param[index]
             if not utils.check_key(prop, "default"):
                 if not utils.check_key(prop, "dependences"):
-                    init["form"].append({
-                        "type": "TitleText",
-                        "name": prop["label"],
-                        "key": index
-                    })
+                    init["form"].append(
+                        {"type": "TitleText", "name": prop["label"], "key": index}
+                    )
                     if prop["type"] == "number":
                         init["number"].append(index)
                 else:
                     depend = prop["dependences"]
                     if depend.split(":")[0] == "func":
                         func_name = depend.split(":")[1]
-                        init["form"].append({
-                            "type": "TitleSelectOne",
-                            "name": prop["label"],
-                            "key": index,
-                            "scroll_exit": True,
-                            "values": globals()[func_name](),
-                            "max_height": 7,
-                            "value": [
-                                0,
-                            ]
-                        })
+                        init["form"].append(
+                            {
+                                "type": "TitleSelectOne",
+                                "name": prop["label"],
+                                "key": index,
+                                "scroll_exit": True,
+                                "values": globals()[func_name](),
+                                "max_height": 7,
+                                "value": [0],
+                            }
+                        )
                     if depend.split(":")[0] == "repo":
                         repo_name = depend.split(":")[1]
-                        init["depend"].append({
-                            "name": prop["label"],
-                            "key": index,
-                            "repo": repo_name
-                        })
+                        init["depend"].append(
+                            {"name": prop["label"], "key": index, "repo": repo_name}
+                        )
     return init
 
 
@@ -103,8 +96,7 @@ def exec_form(stack, project):
             depend_stack = repo[0]
             depend_project = repo[1]
             depend_parent = depend["key"]
-            depend_form = setup_form(
-                depend_stack, depend_project, parent=depend_parent)
+            depend_form = setup_form(depend_stack, depend_project, parent=depend_parent)
             f_init.append(depend_form)
     form["init"] = list(reversed(f_init))
     return form
@@ -132,10 +124,9 @@ def dump(data):
         else:
             if len(d_depend) > 0:
                 for k_depend in d_depend:
-                    pre_yml[d_yml["name"]]["parameters"].update({
-                        k_depend["key"]:
-                        k_depend["val"]
-                    })
+                    pre_yml[d_yml["name"]]["parameters"].update(
+                        {k_depend["key"]: k_depend["val"]}
+                    )
 
         d_dump["deploy"].append("{}.{}".format(d_yml["stack"], d_yml["name"]))
     return d_dump
@@ -159,8 +150,7 @@ def init(stack=None, project=None):
         validate = False
         while not validate:
             f_form = eval(str(field["form"]))
-            form = utils.form_generator("Setup {}".format(field["project"]),
-                                        f_form)
+            form = utils.form_generator("Setup {}".format(field["project"]), f_form)
             for k, v in form.items():
                 if isinstance(v.value, list):
                     for role in f_field:

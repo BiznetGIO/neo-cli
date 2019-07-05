@@ -69,7 +69,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
             stack_name = self.args["<STACK_NAME>"]
             try:
                 q_stack = utils.question(
-                    "Are you sure to delete \"{}\" stack ? ".format(stack_name))
+                    'Are you sure to delete "{}" stack ? '.format(stack_name)
+                )
 
                 if q_stack:
                     proj = orch.do_delete(stack_name)
@@ -101,7 +102,8 @@ Run 'neo rm COMMAND --help' for more information on a command.
         projects = utils.get_project(default_file)
         project_answer = ",".join(projects)
         q_project = utils.question(
-            "Are you sure to delete {} ? ".format(project_answer))
+            "Are you sure to delete {} ? ".format(project_answer)
+        )
 
         if q_project:
             for project in projects:

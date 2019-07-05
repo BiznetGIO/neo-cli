@@ -6,7 +6,7 @@ from neo.libs import utils
 def get_image_client(session=None):
     if not session:
         session = login_lib.load_dumped_session()
-    img = image_client('2', session=session)
+    img = image_client("2", session=session)
     return img
 
 
@@ -23,6 +23,6 @@ def get_list(session=None):
 def detail(image_id, session=None):
     img = get_image_client(session)
     try:
-       return img.images.get(image_id)
+        return img.images.get(image_id)
     except Exception:
         return None

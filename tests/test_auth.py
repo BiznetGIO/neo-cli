@@ -5,15 +5,16 @@ import os
 from neo.libs import login
 from neo.libs import utils
 
+
 class TestAuth:
     @pytest.mark.run(order=0)
     def test_do_login(self, monkeypatch):
         login.load_env_file()
-        username = os.environ.get('OS_USERNAME')
-        passwd = os.environ.get('OS_PASSWORD')
+        username = os.environ.get("OS_USERNAME")
+        passwd = os.environ.get("OS_PASSWORD")
         # give value to input() prompt
-        monkeypatch.setattr('builtins.input', lambda x: username)
-        monkeypatch.setattr('getpass.getpass', lambda x: passwd)
+        monkeypatch.setattr("builtins.input", lambda x: username)
+        monkeypatch.setattr("getpass.getpass", lambda x: passwd)
         # return True is login succeed
         output = login.do_login()
         assert output == True
@@ -40,4 +41,4 @@ class TestAuth:
         outs = utils.read_file(env_file)
         os.remove(env_file)
         os.rename(env_file_tmp, env_file)
-        assert 'usertest' in outs
+        assert "usertest" in outs

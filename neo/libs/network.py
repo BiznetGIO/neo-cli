@@ -16,7 +16,7 @@ def get_list(session=None):
         networks = neutron.list_networks()
     except Exception as e:
         utils.log_err(e)
-    return networks['networks']
+    return networks["networks"]
 
 
 def get_floatingips(session=None):
@@ -25,7 +25,7 @@ def get_floatingips(session=None):
         floatingips = neutron.list_floatingips()
     except Exception as e:
         utils.log_err(e)
-    return floatingips['floatingips']
+    return floatingips["floatingips"]
 
 
 def do_delete(network_id, session=None):
@@ -39,25 +39,22 @@ def do_delete(network_id, session=None):
 def list_sec_group(session=None):
     neutron = get_neutron_client(session)
     try:
-        sec_group =  neutron.list_security_groups()
+        sec_group = neutron.list_security_groups()
     except Exception as e:
         utils.log_err(e)
-    return sec_group['security_groups']
+    return sec_group["security_groups"]
 
 
 def rules_sec_groups(sec_group, session=None):
     obj_sec_rule = list()
     neutron = get_neutron_client(session)
     try:
-        sec_group =  neutron.list_security_groups()['security_groups']
+        sec_group = neutron.list_security_groups()["security_groups"]
     except Exception as e:
         utils.log_err(e)
     else:
         for i in sec_group:
-            data = {
-                'name': i['name'],
-                'description': i['description']
-            }
+            data = {"name": i["name"], "description": i["description"]}
             obj_sec_rule.append(data)
         return obj_sec_rule
 
@@ -80,6 +77,7 @@ def show_subnet(subnet, session=None):
     except Exception as e:
         utils.log_err(e)
     return obj_subnet
+
 
 def delete_subnet(subnet, session):
     neutron = get_neutron_client(session)
@@ -188,6 +186,3 @@ def delete_floatingip(floatingips, session=None):
         return neutron.delete_floatingip(floatingips)
     except Exception as e:
         utils.log_err(e)
-
-
-

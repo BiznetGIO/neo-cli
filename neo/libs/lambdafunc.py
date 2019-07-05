@@ -9,8 +9,8 @@ def get_flavor():
         flavors = utils.yaml_parser(flavor_file)["data"]
     else:
         flavors = list(
-            reversed(
-                sorted([flavor.name for flavor in list(vm.get_flavor())])))
+            reversed(sorted([flavor.name for flavor in list(vm.get_flavor())]))
+        )
         utils.yaml_create(flavor_file, {"data": flavors})
     return flavors
 
@@ -32,6 +32,5 @@ def get_key():
 
 def get_network():
     return [
-        net['name'] for net in network.get_list()
-        if net['name'] != 'Public_Network'
+        net["name"] for net in network.get_list() if net["name"] != "Public_Network"
     ]

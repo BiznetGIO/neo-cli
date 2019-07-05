@@ -17,37 +17,38 @@ class TestAttach:
         os.chdir("tests")
 
         # wait until vm fully resized
-        vm_status = ''
-        while vm_status != 'ACTIVE':
+        vm_status = ""
+        while vm_status != "ACTIVE":
             # get 'unittest-vm' id
             vm_data = vm_lib.get_list()
             for vm in vm_data:
-                if vm.name == 'unittest-vm':
+                if vm.name == "unittest-vm":
                     vm_status = vm.status
             time.sleep(4)
-            print('vm still updating ...')
+            print("vm still updating ...")
 
         f = StringIO()
         with redirect_stdout(f):
-            a = Attach({'<args>': ['-c', 'ls -a'],
-                        '<command>': 'attach'}, '-c', 'ls -a')
+            a = Attach(
+                {"<args>": ["-c", "ls -a"], "<command>": "attach"}, "-c", "ls -a"
+            )
             a.execute()
             out = f.getvalue()
 
         os.chdir(os.pardir)
-        assert 'Success' in out
+        assert "Success" in out
 
     def test_attach_vm(self):
         vm_data = vm_lib.get_list()
         for vm in vm_data:
-            if vm.name == 'unittest-vm':
+            if vm.name == "unittest-vm":
                 vm_id = vm.id
 
-        cmd = ['neo', 'attach', 'vm', vm_id]
+        cmd = ["neo", "attach", "vm", vm_id]
         with open("stdout.txt", "wb") as out, open("stderr.txt", "wb") as err:
             Popen(cmd, stdout=out, stderr=err)
         time.sleep(8)
-        out = open('stderr.txt', 'r').read()
-        os.remove('stdout.txt')
-        os.remove('stderr.txt')
-        assert 'successful!' in out
+        out = open("stderr.txt", "r").read()
+        os.remove("stdout.txt")
+        os.remove("stderr.txt")
+        assert "successful!" in out

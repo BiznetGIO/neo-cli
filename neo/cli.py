@@ -27,13 +27,14 @@ from neo import __version__ as VERSION
 def main():
     """Main CLI entrypoint."""
     import neo.clis
+
     options = docopt(__doc__, version=VERSION, options_first=True)
     command_name = ""
     args = ""
-    command_class =""
+    command_class = ""
 
-    command_name = options.pop('<command>')
-    args = options.pop('<args>')
+    command_name = options.pop("<command>")
+    args = options.pop("<args>")
 
     if args is None:
         args = {}
@@ -41,8 +42,7 @@ def main():
     try:
         module = getattr(neo.clis, command_name)
         neo.clis = getmembers(module, isclass)
-        command_class = [command[1] for command in neo.clis
-                   if command[0] != 'Base'][0]
+        command_class = [command[1] for command in neo.clis if command[0] != "Base"][0]
     except AttributeError as e:
         print(e)
         raise DocoptExit()
@@ -51,5 +51,5 @@ def main():
     command.execute()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
