@@ -64,7 +64,8 @@ Run 'neo ls COMMAND --help' for more information on a command.
                             addr.append("network : {}".format(addr_obj))
                             for addr_ip in instance.addresses[addr_obj]:
                                 addr_meta = "{} IP : {}".format(
-                                    addr_ip["OS-EXT-IPS:type"], addr_ip["addr"])
+                                    addr_ip["OS-EXT-IPS:type"], addr_ip["addr"]
+                                )
                                 addr.append(addr_meta)
                     if len(addr) > 0:
                         pre_instance.append("\n".join(addr))
@@ -85,32 +86,46 @@ Run 'neo ls COMMAND --help' for more information on a command.
                 tabulate(
                     data_instance,
                     headers=[
-                        "ID", "Name", "Key Pair", "Image", "Flavor", "RAM (GiB)", "vCPU",
-                        "Addresses", "Status"
+                        "ID",
+                        "Name",
+                        "Key Pair",
+                        "Image",
+                        "Flavor",
+                        "RAM (GiB)",
+                        "vCPU",
+                        "Addresses",
+                        "Status",
                     ],
-                    tablefmt="grid"))
+                    tablefmt="grid",
+                )
+            )
             exit()
 
         if self.args["network"]:
-            data_network = [[
-                network['id'], network['name'], network['status']
-            ] for network in network_lib.get_list()]
+            data_network = [
+                [network["id"], network["name"], network["status"]]
+                for network in network_lib.get_list()
+            ]
             if len(data_network) == 0:
                 utils.log_err("No Data...")
                 print(self.__doc__)
                 exit()
             print(
                 tabulate(
-                    data_network,
-                    headers=["ID", "Name", "Status"],
-                    tablefmt="grid"))
+                    data_network, headers=["ID", "Name", "Status"], tablefmt="grid"
+                )
+            )
             exit()
 
         if self.args["floatingips"]:
-            data_floatingips = [[
-                floatingips['floating_ip_address'],
-                floatingips['created_at'], floatingips['status']
-            ] for floatingips in network_lib.get_floatingips()]
+            data_floatingips = [
+                [
+                    floatingips["floating_ip_address"],
+                    floatingips["created_at"],
+                    floatingips["status"],
+                ]
+                for floatingips in network_lib.get_floatingips()
+            ]
             if len(data_floatingips) == 0:
                 utils.log_err("No Data...")
                 print(self.__doc__)
@@ -119,7 +134,9 @@ Run 'neo ls COMMAND --help' for more information on a command.
                 tabulate(
                     data_floatingips,
                     headers=["IP Address", "Created at", "Status"],
-                    tablefmt="grid"))
+                    tablefmt="grid",
+                )
+            )
             exit()
 
         if self.args["--outputs"]:

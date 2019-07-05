@@ -29,7 +29,6 @@ def detail(vm_id, session=None):
         utils.log_err(e)
 
 
-
 def do_delete(instance_id, session=None):
     compute = get_nova_client(session)
     compute.servers.delete(instance_id)
@@ -129,12 +128,8 @@ def attach_interface(vm_id, port_id, net_id, fixed_ip, session=None):
     compute = get_nova_client(session)
     try:
         attach_ip = compute.servers.interface_attach(
-                        vm_id,
-                        port_id,
-                        net_id,
-                        fixed_ip,
-                        tag=None
-                    )
+            vm_id, port_id, net_id, fixed_ip, tag=None
+        )
     except Exception as e:
         utils.log_err(e)
     return attach_ip
@@ -196,6 +191,7 @@ def reboot_instance(vm_id, session=None):
     except Exception as e:
         utils.log_err(e)
 
+
 def restore_instance(vm_id, session=None):
     compute = get_nova_client(session)
     try:
@@ -212,6 +208,7 @@ def action_logs(vm_id, session=None):
     except Exception as e:
         utils.log_err(e)
     return log_action
+
 
 def action_logs_show(vm_id, action_id, session=None):
     compute = get_nova_client(session)

@@ -16,6 +16,6 @@ class TestCreate:
         # check deployed vm
         vm_data = vm_lib.get_list()
         for vm in vm_data:
-            if vm.name == 'unittest-vm':
+            if vm.name == "unittest-vm":
                 for network_name, network in vm.networks.items():
-                    assert network_name == 'unittest-network'
+                    assert network_name == "unittest-network"
