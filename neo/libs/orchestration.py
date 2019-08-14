@@ -10,7 +10,7 @@ def get_heat_client(session=None):
     try:
         if not session:
             session = login_lib.load_dumped_session()
-        heat = heat_client.Client('1', session=session)
+        heat = heat_client.Client("1", session=session)
         return heat
     except Exception as e:
         utils.log_err(e)
@@ -51,11 +51,8 @@ def initialize(manifest_fie):
             stack_init["env_file"] = False
 
             if parameters:
-                utils.log_info("Create {} {} environment file".format(
-                    project, stack))
-                utils.yaml_create("{}/env.yml".format(dest), {
-                    "parameters": parameters
-                })
+                utils.log_info("Create {} {} environment file".format(project, stack))
+                utils.yaml_create("{}/env.yml".format(dest), {"parameters": parameters})
                 utils.log_info("Done...")
                 stack_init["env_file"] = "{}/env.yml".format(dest)
 
@@ -68,11 +65,14 @@ def initialize(manifest_fie):
                 set_deploy = deploy.split(".")
                 set_stack = set_deploy[0]
                 set_project = set_deploy[1]
-                set_sequence.append([
-                    new_init for new_init in init
-                    if (new_init["stack"] == set_stack) and (
-                        new_init["project"] == set_project)
-                ][0])
+                set_sequence.append(
+                    [
+                        new_init
+                        for new_init in init
+                        if (new_init["stack"] == set_stack)
+                        and (new_init["project"] == set_project)
+                    ][0]
+                )
             init = set_sequence
     utils.yaml_create("{}/deploy.yml".format(key["deploy_dir"]), init)
     return init
@@ -97,21 +97,22 @@ def do_create(initialize, session=None):
             """ template """
             deploy_template = "{}/{}".format(deploy["dir"], deploy_file)
             deploy_name = deploy["project"]
-            files, template = template_utils.process_template_path(
-                deploy_template)
+            files, template = template_utils.process_template_path(deploy_template)
             """Create Stack"""
             utils.log_info("Create {} stack....".format(deploy["project"]))
             if not deploy["env_file"]:
                 heat.stacks.create(
-                    stack_name=deploy_name, template=template, files=files)
+                    stack_name=deploy_name, template=template, files=files
+                )
             else:
                 deploy_env_file = open(deploy["env_file"])
                 heat.stacks.create(
                     stack_name=deploy_name,
                     template=template,
                     environment=deploy_env_file.read(),
-                    files=files)
-            if (len(initialize) > 0):
+                    files=files,
+                )
+            if len(initialize) > 0:
                 time.sleep(8)
             # if deploy["stack"] == "clusters":
             #     utils.log_info("Generate {} private key...".format(
@@ -149,19 +150,20 @@ def do_update(initialize, session=None):
             """ template """
             deploy_template = "{}/{}".format(deploy["dir"], deploy_file)
             deploy_name = deploy["project"]
-            files, template = template_utils.process_template_path(
-                deploy_template)
+            files, template = template_utils.process_template_path(deploy_template)
             """Update Stack"""
             utils.log_info("Update {} stack....".format(deploy["project"]))
             if not deploy["env_file"]:
                 heat.stacks.update(deploy_name, template=template, files=files)
             else:
                 deploy_env_file = open(deploy["env_file"])
-                heat.stacks.update(deploy_name,
+                heat.stacks.update(
+                    deploy_name,
                     template=template,
                     environment=deploy_env_file.read(),
-                    files=files)
-            if (len(initialize) > 0):
+                    files=files,
+                )
+            if len(initialize) > 0:
                 time.sleep(8)
             # if deploy["stack"] == "clusters":
             #     utils.log_info("Generate {} private key...".format(
@@ -192,10 +194,16 @@ def do_update(initialize, session=None):
 def get_list(session=None):
     heat = get_heat_client(session)
     stacks = heat.stacks.list()
-    data_stack = [[
-        stack.id, stack.stack_name, stack.stack_status_reason,
-        stack.creation_time, stack.updated_time
-    ] for stack in stacks]
+    data_stack = [
+        [
+            stack.id,
+            stack.stack_name,
+            stack.stack_status_reason,
+            stack.creation_time,
+            stack.updated_time,
+        ]
+        for stack in stacks
+    ]
     return data_stack
 
 
@@ -205,8 +213,11 @@ def get_stack(stack_name, session=None):
     try:
         stack = heat.stacks.get(stack_name)
         data_stack = [
-            stack.id, stack.stack_name, stack.stack_status_reason,
-            stack.creation_time, stack.updated_time
+            stack.id,
+            stack.stack_name,
+            stack.stack_status_reason,
+            stack.creation_time,
+            stack.updated_time,
         ]
     except:
         pass
@@ -223,12 +234,17 @@ def get_stack(stack_name, session=None):
 #
 #     return private_key
 
+
 def get_pkey_from_stack(stack_name, session=None):
     heat = get_heat_client(session)
     private_key = None
     try:
-        keyname = heat.stacks.output_show(stack_name, "key_name")["output"]["output_value"]
-        private_key = heat.stacks.output_show(keyname, "private_key")["output"]["output_value"]
+        keyname = heat.stacks.output_show(stack_name, "key_name")["output"][
+            "output_value"
+        ]
+        private_key = heat.stacks.output_show(keyname, "private_key")["output"][
+            "output_value"
+        ]
     except:
         pass
 
@@ -239,7 +255,9 @@ def get_private_key(key_stack_name, session=None):
     heat = get_heat_client(session)
     private_key = None
     try:
-        private_key = heat.stacks.output_show(key_stack_name, "private_key")["output"]["output_value"]
+        private_key = heat.stacks.output_show(key_stack_name, "private_key")["output"][
+            "output_value"
+        ]
     except Exception as e:
         pass
 

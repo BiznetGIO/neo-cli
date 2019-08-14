@@ -24,6 +24,7 @@ from paramiko.py3compat import u
 try:
     import termios
     import tty
+
     has_termios = True
 except ImportError:
     has_termios = False
@@ -51,7 +52,7 @@ def posix_shell(chan):
                 try:
                     x = u(chan.recv(1024))
                     if len(x) == 0:
-                        sys.stdout.write('\r\n*** EOF\r\n')
+                        sys.stdout.write("\r\n*** EOF\r\n")
                         break
                     sys.stdout.write(x)
                     sys.stdout.flush()
@@ -79,13 +80,13 @@ def windows_shell(chan):
         while True:
             data = sock.recv(256)
             if not data:
-                sys.stdout.write('\r\n*** EOF ***\r\n\r\n')
+                sys.stdout.write("\r\n*** EOF ***\r\n\r\n")
                 sys.stdout.flush()
                 break
             sys.stdout.write(data)
             sys.stdout.flush()
 
-    writer = threading.Thread(target=writeall, args=(chan, ))
+    writer = threading.Thread(target=writeall, args=(chan,))
     writer.start()
 
     try:

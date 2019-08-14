@@ -64,7 +64,7 @@ Run 'neo attach COMMAND --help' for more information on a command.
                 key_name = vm_detail["key_name"]
                 out = orch.get_private_key(key_name)
                 if out:
-                    with open(key_pair_temp.name, 'w') as pkey:
+                    with open(key_pair_temp.name, "w") as pkey:
                         pkey.write(out)
                         os.chmod(key_pair_temp.name, 0o600)
                         utils.log_info("Done...")
@@ -95,8 +95,7 @@ Run 'neo attach COMMAND --help' for more information on a command.
             if not user:
                 user = ""
                 while user == "":
-                    user = input(
-                        "Username : ")
+                    user = input("Username : ")
 
             utils.log_info("Login with {}".format(user))
             utils.ssh_shell(addr[0], user, key_file=key_pair_temp.name)
@@ -122,10 +121,18 @@ Run 'neo attach COMMAND --help' for more information on a command.
 
         if os.path.exists(deploy_file):
             deploy_init = utils.yaml_parser(deploy_file)
-            deploy_init = [d_init for d_init in deploy_init if d_init["stack"] in ["instances","clusters","databases"]]
+            deploy_init = [
+                d_init
+                for d_init in deploy_init
+                if d_init["stack"] in ["instances", "clusters", "databases"]
+            ]
         else:
             deploy_init = orch.initialize(default_file)
-            deploy_init = [d_init for d_init in deploy_init if d_init["stack"] in ["instances","clusters","databases"]]
+            deploy_init = [
+                d_init
+                for d_init in deploy_init
+                if d_init["stack"] in ["instances", "clusters", "databases"]
+            ]
 
         meta = None
         if len(deploy_init) == 1:
@@ -133,9 +140,20 @@ Run 'neo attach COMMAND --help' for more information on a command.
 
         if len(deploy_init) > 1:
             meta_project = [pra_meta["project"] for pra_meta in deploy_init]
-            meta_field = [{"type": "TitleSelectOne", "name": "Select Project", "key": "project", "values": meta_project}]
-            meta_field = utils.prompt_generator("Select project...",meta_field)
-            meta = [pra_meta for pra_meta in deploy_init if pra_meta in [meta_field["project"]]][0]
+            meta_field = [
+                {
+                    "type": "TitleSelectOne",
+                    "name": "Select Project",
+                    "key": "project",
+                    "values": meta_project,
+                }
+            ]
+            meta_field = utils.prompt_generator("Select project...", meta_field)
+            meta = [
+                pra_meta
+                for pra_meta in deploy_init
+                if pra_meta in [meta_field["project"]]
+            ][0]
 
         if meta:
             project_name = meta["project"]
@@ -145,8 +163,7 @@ Run 'neo attach COMMAND --help' for more information on a command.
             project_user = None
 
             if not os.path.exists(private_key_file):
-                utils.log_info("Generate {} private key...".format(
-                    project_name))
+                utils.log_info("Generate {} private key...".format(project_name))
                 wait_key = True
                 while wait_key:
                     out = orch.get_pkey_from_stack(project_name)
@@ -188,18 +205,35 @@ Run 'neo attach COMMAND --help' for more information on a command.
 
                 if self.args["--command"]:
                     try:
-                        utils.ssh_out_stream(project_hostname, project_user, self.args["--command"], key_file=private_key_file)
+                        utils.ssh_out_stream(
+                            project_hostname,
+                            project_user,
+                            self.args["--command"],
+                            key_file=private_key_file,
+                        )
                     except KeyboardInterrupt:
                         exit()
                 elif self.args["--tunneling"]:
                     try:
-                        tunnel_args = " ".join(["-L {}".format(t_arg) for t_arg in self.args["--tunneling"].split(",")])
-                        commands = "ssh -i {} {} {}@{}".format(private_key_file, tunnel_args, project_user, project_hostname).split(" ")
+                        tunnel_args = " ".join(
+                            [
+                                "-L {}".format(t_arg)
+                                for t_arg in self.args["--tunneling"].split(",")
+                            ]
+                        )
+                        commands = "ssh -i {} {} {}@{}".format(
+                            private_key_file,
+                            tunnel_args,
+                            project_user,
+                            project_hostname,
+                        ).split(" ")
                         subprocess.call(commands)
                     except KeyboardInterrupt:
                         exit()
                 else:
                     try:
-                        utils.ssh_shell(project_hostname, project_user, key_file=private_key_file)
+                        utils.ssh_shell(
+                            project_hostname, project_user, key_file=private_key_file
+                        )
                     except KeyboardInterrupt:
                         exit()

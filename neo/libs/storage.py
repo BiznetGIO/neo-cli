@@ -11,7 +11,7 @@ def get_cinder_client(session=None):
     return storage
 
 
-def get_list(session= None):
+def get_list(session=None):
     storage = get_cinder_client(session)
     list_storage = [i for i in storage.volumes.list()]
     return list_storage
@@ -28,8 +28,7 @@ def do_delete(vol_id, session=None):
     try:
         storage.volumes.delete(vol_id)
     except Exception as e:
-        utils.log_err("Volumes Not Delete : "+ str(e))
+        utils.log_err("Volumes Not Delete : " + str(e))
         return 0
     else:
         return 1
-

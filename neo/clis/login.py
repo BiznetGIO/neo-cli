@@ -23,12 +23,14 @@ class Login(Base):
     def execute(self):
         if self.args["--describe"]:
             envs = login_lib.get_env_values()
-            env_data = [[
-                envs['username'],
-                envs['auth_url'],
-                envs['project_id'],
-                envs['user_domain_name']
-            ]]
+            env_data = [
+                [
+                    envs["username"],
+                    envs["auth_url"],
+                    envs["project_id"],
+                    envs["user_domain_name"],
+                ]
+            ]
             if len(env_data) == 0:
                 utils.log_err("No Data...")
                 print(self.__doc__)
@@ -36,21 +38,24 @@ class Login(Base):
             print(
                 tabulate(
                     env_data,
-                    headers=["Username", "Auth URL", "Project ID",
-                             "Domain Name"],
-                    tablefmt="grid"))
+                    headers=["Username", "Auth URL", "Project ID", "Domain Name"],
+                    tablefmt="grid",
+                )
+            )
             exit()
 
-        if (self.args["--domain"] and self.args["--keystone-url"]):
+        if self.args["--domain"] and self.args["--keystone-url"]:
             try:
-                username = self.args['--username']
-                auth_url = self.args['--keystone-url']
-                user_domain_name = self.args['--domain']
-                login_lib.do_login(auth_url=auth_url,
-                                   user_domain_name=user_domain_name,
-                                   username=username)
+                username = self.args["--username"]
+                auth_url = self.args["--keystone-url"]
+                user_domain_name = self.args["--domain"]
+                login_lib.do_login(
+                    auth_url=auth_url,
+                    user_domain_name=user_domain_name,
+                    username=username,
+                )
             except Exception as e:
                 utils.log_err(e)
 
-        if (not self.args["--domain"] and not self.args["--keystone-url"]):
+        if not self.args["--domain"] and not self.args["--keystone-url"]:
             login_lib.do_login()
