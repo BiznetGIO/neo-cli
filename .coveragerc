@@ -1,0 +1,16 @@
+[run]
+source =
+       neo/
+
+omit =
+     docs/*
+     neo/libs/prompt.py
+     neo/libs/ncurses.py
+     neo/libs/interactive_ssh_utils.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    except MemoryError
