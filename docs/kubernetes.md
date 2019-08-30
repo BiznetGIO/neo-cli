@@ -1,11 +1,14 @@
-## Deploy Kubernetes
+# Deploy Kubernetes
+
 ```bash
 $ neo create kubernetes
 ```
+---
 
 ## Dashboard
 
 ### Tunneling
+
 ```bash
 $ neo attach -t 8001:127.0.0.1:8001
 [k8s@k8s-test-controller-2hojdpb5a22a ~]$ kube-token
@@ -31,8 +34,13 @@ open url http://127.0.0.1:8001 and then login with your token access
 
 ![k8s-tunnel](img/k8s-tunnel.gif)
 
+---
+
 ## Create simple user
-In this guide, we will find out how to create a new user using Service Account mechanism of Kubernetes, grant this user admin permissions and log in to Dashboard using bearer token tied to this user.
+
+In this guide, we will find out how to create a new user using Service Account
+mechanism of Kubernetes, grant this user admin permissions and log in to
+Dashboard using bearer token tied to this user.
 
 Copy provided snippets to some `xxx.yaml` file and use `kubectl create -f xxx.yaml` to create them.
 
@@ -50,9 +58,13 @@ metadata:
 
 ### Create ClusterRoleBinding
 
-In most cases after provisioning our cluster using `kops` or `kubeadm` or any other popular tool admin `Role` already exists in the cluster. We can use it and create only `RoleBinding` for our `ServiceAccount`.
+In most cases after provisioning our cluster using `kops` or `kubeadm` or any
+other popular tool admin `Role` already exists in the cluster. We can use it and
+create only `RoleBinding` for our `ServiceAccount`.
 
-**NOTE**: `apiVersion` of `ClusterRoleBinding` resource may differ between Kubernetes versions. Starting from `v1.8` it was promoted to `rbac.authorization.k8s.io/v1`.
+**NOTE**: `apiVersion` of `ClusterRoleBinding` resource may differ between
+Kubernetes versions. Starting from `v1.8` it was promoted to
+`rbac.authorization.k8s.io/v1`.
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -100,4 +112,7 @@ Click `Sign in` button and that's it. You are now logged in as an admin.
 
 ![zrzut ekranu z 2017-12-14 10-59-31](https://user-images.githubusercontent.com/2285385/33986449-e329f4a8-e0bd-11e7-92e2-86b7191af08c.png)
 
-In order to find out more about how to grant/deny permissions in Kubernetes read official [authentication](https://kubernetes.io/docs/admin/authentication/) & [authorization](https://kubernetes.io/docs/admin/authorization/) documentation.
+In order to find out more about how to grant/deny permissions in Kubernetes read
+official [authentication](https://kubernetes.io/docs/admin/authentication/) &
+[authorization](https://kubernetes.io/docs/admin/authorization/) documentation.
+

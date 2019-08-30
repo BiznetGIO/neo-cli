@@ -1,4 +1,6 @@
-# NEO DSL
+# neo DSL
+
+---
 
 ## Structure
 
@@ -10,6 +12,8 @@
     <parameter_2_key> : <paramater_2_value>
   template: <template>
 ```
+
+---
 
 ## Templates
 

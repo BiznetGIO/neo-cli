@@ -44,12 +44,12 @@ resources for questions about your own code:
 6. Don't break unit tests or functionality.
 7. Update the documentation header comments if needed.
 8. **Rebase on `dev` branch and resolve any conflicts _before submitting a pull request!_**
-9. Submit a pull request to the `dev` branch. Make sure to add yourself to [AUTHORS](AUTHORS.md)
+9. Submit a pull request to the `dev` branch. Make sure to add yourself to AUTHORS.md
 
 
 ### First time setup
 
-Please refer to [instalation](docs/instalation.md) guide.
+Please refer to [instalation](index.md#instalation) guide.
 
 ### Running the tests
 
