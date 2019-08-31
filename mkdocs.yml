@@ -1,0 +1,35 @@
+site_name: neo-cli
+site_description: neo-cli documentation
+
+repo_url: https://github.com/BiznetGIO/neo-cli/
+
+theme:
+    name: mkdocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - django
+
+nav:
+    - Home: index.md
+    - Docs:
+        - Deploy Kubernetes: kubernetes.md
+        - neo DSL: neo-dsl.md
+        - Contribution Gude: contributing.md
+
+extra_css:
+    - css/extra.css
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition
+    - def_list
+    - mdx_gh_links:
+        user: mkdocs
+        repo: mkdocs
+
+copyright: Copyright &copy; 2019 BiznetGio.
+
+plugins:
+    - search
