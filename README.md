@@ -25,7 +25,7 @@ Watch `neo-cli` in [action](https://asciinema.org/a/164200)
 
 ![neo](/docs/img/neo.gif)
 
-## Installing
+## Installation
 
 Install and update using  [pip](https://pip.pypa.io/en/stable/quickstart/)
 
@@ -35,14 +35,6 @@ At the time neo-cli only support Python3 or newer.
 pip3 install -U neo-cli
 ```
 
-## Contributing
+## Documentation
 
-- Please read our [Contributor's Guide](CONTRIBUTING.md) on how to make a
-  contribution to neo-cli.
-- See [AUTHORS](AUTHORS.md) for a list of contributors.
-
-
-## Links
-
-- [Documentation](docs/index.md)
-- [Presentation](http://speakerdeck.com/u/anak10thn)
+Documentation is available at [https://biznetgio.github.io/neo-cli](https://biznetgio.github.io/neo-cli/)
