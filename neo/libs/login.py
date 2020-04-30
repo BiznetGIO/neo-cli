@@ -6,6 +6,7 @@ from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from keystoneclient.v3 import client
 from neo.libs import utils
+import toml
 
 GLOBAL_HOME = os.path.expanduser("~")
 GLOBAL_AUTH_URL = "https://keystone.wjv-1.neo.id:443/v3"
@@ -36,6 +37,16 @@ def get_region():
         utils.log_err("Region not found, please check your region input")
         exit()
 
+def get_region_toml(username, password):
+    config = ""
+    for key,value in GLOBAL_REGION.items():
+        config += "\n"
+        config += "[region.{}]\n".format(key)
+        config += "OS_AUTH_URL = '{}'\n".format(value)
+        config += "OS_PROJECT_ID = '{}'\n".format(get_project_id(username, password, value, GLOBAL_USER_DOMAIN_NAME))
+        config += "OS_USER_DOMAIN_NAME = '{}'\n".format(GLOBAL_USER_DOMAIN_NAME)
+        config += "\n"
+    return config
 
 def generate_session(username, password, auth_url, user_domain_name, project_id=None):
     auth = v3.Password(
@@ -53,17 +64,22 @@ def generate_session(username, password, auth_url, user_domain_name, project_id=
 
 
 def check_env():
-    return os.path.isfile("{}/.neo.env".format(GLOBAL_HOME))
+    return os.path.isfile("{}/.neo/config.toml".format(GLOBAL_HOME))
 
 
-def create_env_file(username, password, project_id, auth_url, user_domain_name):
+def create_env_file(username, password):
+    config_list = """
+                [auth]
+                OS_USERNAME = '%s'
+                OS_PASSWORD = '%s'
+                %s
+            """ %(username, password, get_region_toml(username,password))
+    configs = toml.loads(config_list)
     try:
-        env_file = open("{}/.neo.env".format(GLOBAL_HOME), "w+")
-        env_file.write("OS_USERNAME=%s\n" % username)
-        env_file.write("OS_PASSWORD=%s\n" % password)
-        env_file.write("OS_AUTH_URL=%s\n" % auth_url)
-        env_file.write("OS_PROJECT_ID=%s\n" % project_id)
-        env_file.write("OS_USER_DOMAIN_NAME=%s\n" % user_domain_name)
+        config_toml = "{}/.neo/config.toml".format(GLOBAL_HOME)
+        os.makedirs(os.path.dirname(config_toml), exist_ok=True)
+        env_file = open(config_toml, "w+")
+        env_file.write(toml.dumps(configs))
         env_file.close()
         return True
     except Exception as e:
@@ -72,18 +88,18 @@ def create_env_file(username, password, project_id, auth_url, user_domain_name):
 
 
 def load_env_file():
-    return load_dotenv("{}/.neo.env".format(GLOBAL_HOME), override=True)
+    return toml.load("{}/.neo/config.toml".format(GLOBAL_HOME))
 
 
 def get_env_values():
     if check_env():
         load_env_file()
         neo_env = {}
-        neo_env["username"] = os.environ.get("OS_USERNAME")
-        neo_env["password"] = os.environ.get("OS_PASSWORD")
-        neo_env["auth_url"] = os.environ.get("OS_AUTH_URL")
-        neo_env["project_id"] = os.environ.get("OS_PROJECT_ID")
-        neo_env["user_domain_name"] = os.environ.get("OS_USER_DOMAIN_NAME")
+        neo_env["username"] = load_env_file()["auth"]["OS_USERNAME"]
+        neo_env["password"] = load_env_file()["auth"]["OS_PASSWORD"]
+        neo_env["auth_url"] = load_env_file()["region"]["jkt"]["OS_AUTH_URL"]
+        neo_env["project_id"] = load_env_file()["region"]["jkt"]["OS_PROJECT_ID"]
+        neo_env["user_domain_name"] = load_env_file()["region"]["jkt"]["OS_USER_DOMAIN_NAME"]
         return neo_env
     # else:
     #    utils.log_err("Can't find NEO environment configuration. Maybe you haven't login yet?")
@@ -148,8 +164,9 @@ def do_fresh_login(username=None, auth_url=None):
             user_domain_name=GLOBAL_USER_DOMAIN_NAME,
         )
         # generate fresh neo.env
+        # refactor code passing username and password to pass toml config
         create_env_file(
-            username, password, project_id, auth_url, GLOBAL_USER_DOMAIN_NAME
+            username, password
         )
         utils.log_info("Login Success")
     except Exception as e:
@@ -210,7 +227,7 @@ def do_logout():
     if check_session():
         home = os.path.expanduser("~")
         os.remove("/tmp/session.pkl")
-        os.remove(home + "/.neo.env")
+        os.remove(home + "/.neo/config.toml")
         utils.log_info("Logout Success")
 
 
