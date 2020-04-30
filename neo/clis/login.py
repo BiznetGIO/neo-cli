@@ -23,14 +23,17 @@ class Login(Base):
         if self.args["--describe"]:
             envs = login_lib.get_env_values()
             try:
-                env_data = [
-                    [
-                        envs["username"],
-                        envs["auth_url"],
-                        envs["project_id"],
-                        envs["user_domain_name"],
-                    ]
-                ]
+                env_data = []
+                for env in envs:
+                    data = [
+                            env["username"],
+                            env["region"],
+                            env["auth_url"],
+                            env["project_id"],
+                            env["user_domain_name"],
+                            env["status"]
+                        ]
+                    env_data.append(data)
             except:
                 exit()
 
@@ -42,7 +45,7 @@ class Login(Base):
             print(
                 tabulate(
                     env_data,
-                    headers=["Username", "Auth URL", "Project ID", "Domain Name"],
+                    headers=["Username", "Region", "Auth URL", "Project ID", "Domain Name", "Status"],
                     tablefmt="grid",
                 )
             )

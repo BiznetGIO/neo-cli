@@ -8,7 +8,7 @@ from neo.libs import login
 class TestLogin:
     def test_check_env(self, fs):
         home = os.path.expanduser("~")
-        fs.create_file(f"{home}/.neo.env")
+        fs.create_file(f"{home}/.neo/config.toml")
         assert login.check_env()
 
     def fake_load_env_file(self):
@@ -58,15 +58,15 @@ class TestLogin:
 
         home = os.path.expanduser("~")
         fs.create_file("/tmp/session.pkl")
-        fs.create_file(home + "/.neo.env")
+        fs.create_file(home + "/.neo/config.toml")
 
         assert os.path.exists("/tmp/session.pkl")
-        assert os.path.exists(home + "/.neo.env")
+        assert os.path.exists(home + "/.neo/config.toml")
 
         login.do_logout()
 
         assert os.path.exists("/tmp/session.pkl") is False
-        assert os.path.exists(home + "/.neo.env") is False
+        assert os.path.exists(home + "/.neo/config.toml") is False
 
     def test_check_session(self, fs):
         fs.create_file("/tmp/session.pkl")
