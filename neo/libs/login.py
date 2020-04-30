@@ -123,28 +123,6 @@ def get_project_id(username, password, auth_url, user_domain_name):
         return enabled_project[0]
 
 
-""" def do_fresh_login(auth_url=GLOBAL_AUTH_URL, user_domain_name=GLOBAL_USER_DOMAIN_NAME):
-    try:
-        username = get_username()
-        password = get_password()
-        # use default value for fresh login
-        project_id = get_project_id(username, password, auth_url, user_domain_name)
-        # generate fresh session
-        generate_session(
-            auth_url=auth_url,
-            username=username,
-            password=password,
-            project_id=project_id,
-            user_domain_name=user_domain_name,
-        )
-        # generate fresh neo.env
-        create_env_file(username, password, project_id, auth_url, user_domain_name)
-        utils.log_info("Login Success")
-    except Exception as e:
-        utils.log_err(e)
-        utils.log_err("Login Failed") """
-
-
 def do_fresh_login(username=None, auth_url=None):
     if username != None:
         username = username
@@ -191,31 +169,6 @@ def regenerate_sess():
     )
 
 
-""" def do_login(auth_url=GLOBAL_AUTH_URL, user_domain_name=GLOBAL_USER_DOMAIN_NAME, **username):
-    try:
-        if check_env() and check_session():
-            old_env_data = get_env_values()
-            if is_current_env(
-                auth_url, user_domain_name, username=old_env_data["username"]
-            ):
-                print("You are already logged.")
-                print("  use 'neo login -D' to see your current account")
-            else:
-                print("Doing fresh login. You switched user account")
-                do_fresh_login(auth_url=auth_url, user_domain_name=user_domain_name)
-        elif check_env() and not check_session():
-            print("Retrieving old login data ...")
-            regenerate_sess()
-            utils.log_info("Login Success")
-        else:
-            print("Doing fresh login. You don't have old login data")
-            do_fresh_login(auth_url, user_domain_name)
-    except Exception as e:
-        utils.log_err(e)
-        utils.log_err("Login Failed")
-        return False """
-
-
 def login_check(username=None, region=None):
     try:
         print("Connecting to region " + region + " at " + GLOBAL_REGION[region])
@@ -241,7 +194,7 @@ def login_check(username=None, region=None):
         utils.log_err("Region " + str(e) + " is  not found")
 
 
-def do_login2(username=None, region=None):
+def do_login(username=None, region=None):
     if region == None and username == None:
         do_fresh_login()
     elif region == None or username == None:

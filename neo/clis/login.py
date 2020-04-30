@@ -49,22 +49,9 @@ class Login(Base):
             exit()
 
         if not self.args["--region"] and not self.args["--username"]:
-            login_lib.do_login2()
+            login_lib.do_login()
         else:
-            login_lib.do_login2(
+            login_lib.do_login(
                 username=self.args["--username"], region=self.args["--region"]
             )
 
-
-"""         if self.args["--domain"] and self.args["--keystone-url"]:
-            try:
-                username = self.args["--username"]
-                auth_url = self.args["--keystone-url"]
-                user_domain_name = self.args["--domain"]
-                login_lib.do_login(
-                    auth_url=auth_url,
-                    user_domain_name=user_domain_name,
-                    username=username,
-                )
-            except Exception as e:
-                utils.log_err(e) """
