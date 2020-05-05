@@ -60,7 +60,6 @@ def generate_session(username, password, auth_url, user_domain_name, project_id=
         include_catalog=True,
     )
     sess = session.Session(auth=auth)
-    dump_session(sess)
     return sess
 
 
@@ -90,7 +89,6 @@ def create_env_file(username, password, auth_url):
 
 def load_env_file():
     return toml.load("{}/.neo/config.toml".format(GLOBAL_HOME))
-
 
 def get_env_values():
     if check_env():
@@ -124,8 +122,27 @@ def is_current_env(auth_url, user_domain_name, username):
             return True
         else:
             continue
-            return False
 
+def get_active_env():
+    if check_env():
+        load_env_file()
+        active_env = {}
+        for key,value in GLOBAL_REGION.items():
+            if (load_env_file()["region"]["{}".format(key)]["status"]) == 'ACTIVE':
+                active_env["username"] = load_env_file()["auth"]["os_username"]
+                active_env["password"] = load_env_file()["auth"]["os_password"]
+                active_env["auth_url"] = load_env_file()["region"]["{}".format(key)]["os_auth_url"]
+                active_env["project_id"] = load_env_file()["region"]["{}".format(key)]["os_project_id"]
+                active_env["user_domain_name"] = load_env_file()["region"]["{}".format(key)]["os_user_domain_name"]
+                dump_session(generate_session(active_env["username"], 
+                                            active_env["password"], 
+                                            active_env["auth_url"], 
+                                            active_env["user_domain_name"], 
+                                            active_env["project_id"])
+                            )
+                return active_env
+            else:
+                continue
 
 def get_project_id(username, password, auth_url, user_domain_name):
     sess = generate_session(
@@ -165,15 +182,16 @@ def do_fresh_login(username=None, auth_url=None):
         project_id = get_project_id(
             username, password, auth_url, GLOBAL_USER_DOMAIN_NAME
         )
-        generate_session(
+        dump_session(generate_session(
             auth_url=auth_url,
             username=username,
             password=password,
             project_id=project_id,
             user_domain_name=GLOBAL_USER_DOMAIN_NAME,
+            )
         )
         # generate fresh neo.env
-        # refactor code passing username and password to pass toml config
+        # passing username and password to pass toml config
         create_env_file(
             username, password, auth_url
         )
@@ -185,13 +203,14 @@ def do_fresh_login(username=None, auth_url=None):
 
 def regenerate_sess():
     """ Regenerate session from old neo.env"""
-    env_data = get_env_values()
-    generate_session(
+    env_data = get_active_env()
+    dump_session(generate_session(
         auth_url=env_data["auth_url"],
         username=env_data["username"],
         password=env_data["password"],
         project_id=env_data["project_id"],
         user_domain_name=env_data["user_domain_name"],
+        )
     )
 
 
@@ -199,10 +218,10 @@ def login_check(username=None, region=None):
     try:
         print("Connecting to region " + region + " at " + GLOBAL_REGION[region])
         auth_url = GLOBAL_REGION[region]
-        old_env_data = get_env_values()
+        old_env_data = get_active_env()
         if check_env() and check_session():
             if is_current_env(
-                auth_url, GLOBAL_USER_DOMAIN_NAME, username=old_env_data[0]["username"]
+                auth_url, GLOBAL_USER_DOMAIN_NAME, username=old_env_data["username"]
             ):
                 print("You have logged in")
                 print("You are already logged.")
