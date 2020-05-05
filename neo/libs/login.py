@@ -45,7 +45,7 @@ def get_region_toml(username, password, auth_url):
         config += "os_auth_url = '{}'\n".format(value)
         config += "os_project_id = '{}'\n".format(get_project_id(username, password, value, GLOBAL_USER_DOMAIN_NAME))
         config += "os_user_domain_name = '{}'\n".format(GLOBAL_USER_DOMAIN_NAME)
-        config += "status = '{}'\n".format('active' if value == auth_url else 'idle')
+        config += "status = '{}'\n".format('ACTIVE' if value == auth_url else 'IDLE')
         config += "\n"
     return config
 
@@ -119,7 +119,7 @@ def is_current_env(auth_url, user_domain_name, username):
             env["auth_url"] == auth_url
             and env["user_domain_name"] == user_domain_name
             and env["username"] == username 
-            and env["status"] == 'active'
+            and env["status"] == 'ACTIVE'
         ):
             return True
         else:
