@@ -26,13 +26,13 @@ class Login(Base):
                 env_data = []
                 for env in envs:
                     data = [
-                            env["username"],
-                            env["region"],
-                            env["auth_url"],
-                            env["project_id"],
-                            env["user_domain_name"],
-                            env["status"]
-                        ]
+                        env["username"],
+                        env["region"],
+                        env["auth_url"],
+                        env["project_id"],
+                        env["user_domain_name"],
+                        env["status"],
+                    ]
                     env_data.append(data)
             except:
                 exit()
@@ -45,7 +45,14 @@ class Login(Base):
             print(
                 tabulate(
                     env_data,
-                    headers=["Username", "Region", "Auth URL", "Project ID", "Domain Name", "Status"],
+                    headers=[
+                        "Username",
+                        "Region",
+                        "Auth URL",
+                        "Project ID",
+                        "Domain Name",
+                        "Status",
+                    ],
                     tablefmt="grid",
                 )
             )
@@ -57,4 +64,3 @@ class Login(Base):
             login_lib.do_login(
                 username=self.args["--username"], region=self.args["--region"]
             )
-

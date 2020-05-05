@@ -37,17 +37,21 @@ def get_region():
         utils.log_err("Region not found, please check your region input")
         exit()
 
+
 def get_region_toml(username, password, auth_url):
     config = ""
-    for key,value in GLOBAL_REGION.items():
+    for key, value in GLOBAL_REGION.items():
         config += "\n"
         config += "[region.{}]\n".format(key)
         config += "os_auth_url = '{}'\n".format(value)
-        config += "os_project_id = '{}'\n".format(get_project_id(username, password, value, GLOBAL_USER_DOMAIN_NAME))
+        config += "os_project_id = '{}'\n".format(
+            get_project_id(username, password, value, GLOBAL_USER_DOMAIN_NAME)
+        )
         config += "os_user_domain_name = '{}'\n".format(GLOBAL_USER_DOMAIN_NAME)
-        config += "status = '{}'\n".format('ACTIVE' if value == auth_url else 'IDLE')
+        config += "status = '{}'\n".format("ACTIVE" if value == auth_url else "IDLE")
         config += "\n"
     return config
+
 
 def generate_session(username, password, auth_url, user_domain_name, project_id=None):
     auth = v3.Password(
@@ -73,7 +77,11 @@ def create_env_file(username, password, auth_url):
                 os_username = '%s'
                 os_password = '%s'
                 %s
-            """ %(username, password, get_region_toml(username, password, auth_url))
+            """ % (
+        username,
+        password,
+        get_region_toml(username, password, auth_url),
+    )
     configs = toml.loads(config_list)
     try:
         config_toml = "{}/.neo/config.toml".format(GLOBAL_HOME)
@@ -90,24 +98,31 @@ def create_env_file(username, password, auth_url):
 def load_env_file():
     return toml.load("{}/.neo/config.toml".format(GLOBAL_HOME))
 
+
 def get_env_values():
     if check_env():
         load_env_file()
         neo_env = []
-        for key,value in GLOBAL_REGION.items():
+        for key, value in GLOBAL_REGION.items():
             list_env = {
-            "username" : load_env_file()["auth"]["os_username"],
-            "password" : load_env_file()["auth"]["os_password"],
-            "region" : key+"{}".format('(default)' if key == DEFAULT_REGION else ''),
-            "auth_url" : load_env_file()["region"]["{}".format(key)]["os_auth_url"],
-            "project_id" : load_env_file()["region"]["{}".format(key)]["os_project_id"],
-            "user_domain_name" : load_env_file()["region"]["{}".format(key)]["os_user_domain_name"],
-            "status" : load_env_file()["region"]["{}".format(key)]["status"]
+                "username": load_env_file()["auth"]["os_username"],
+                "password": load_env_file()["auth"]["os_password"],
+                "region": key
+                + "{}".format("(default)" if key == DEFAULT_REGION else ""),
+                "auth_url": load_env_file()["region"]["{}".format(key)]["os_auth_url"],
+                "project_id": load_env_file()["region"]["{}".format(key)][
+                    "os_project_id"
+                ],
+                "user_domain_name": load_env_file()["region"]["{}".format(key)][
+                    "os_user_domain_name"
+                ],
+                "status": load_env_file()["region"]["{}".format(key)]["status"],
             }
             neo_env.append(list_env)
         return neo_env
     # else:
-    #    utils.log_err("Can't find NEO environment configuration. Maybe you haven't login yet?")  
+    #    utils.log_err("Can't find NEO environment configuration. Maybe you haven't login yet?")
+
 
 def is_current_env(auth_url, user_domain_name, username):
     """ check if auth_url and user_domain_name differ from current ~/.neo/config.toml"""
@@ -116,33 +131,44 @@ def is_current_env(auth_url, user_domain_name, username):
         if (
             env["auth_url"] == auth_url
             and env["user_domain_name"] == user_domain_name
-            and env["username"] == username 
-            and env["status"] == 'ACTIVE'
+            and env["username"] == username
+            and env["status"] == "ACTIVE"
         ):
             return True
         else:
             continue
 
+
 def get_active_env():
     if check_env():
         load_env_file()
         active_env = {}
-        for key,value in GLOBAL_REGION.items():
-            if (load_env_file()["region"]["{}".format(key)]["status"]) == 'ACTIVE':
+        for key, value in GLOBAL_REGION.items():
+            if (load_env_file()["region"]["{}".format(key)]["status"]) == "ACTIVE":
                 active_env["username"] = load_env_file()["auth"]["os_username"]
                 active_env["password"] = load_env_file()["auth"]["os_password"]
-                active_env["auth_url"] = load_env_file()["region"]["{}".format(key)]["os_auth_url"]
-                active_env["project_id"] = load_env_file()["region"]["{}".format(key)]["os_project_id"]
-                active_env["user_domain_name"] = load_env_file()["region"]["{}".format(key)]["os_user_domain_name"]
-                dump_session(generate_session(active_env["username"], 
-                                            active_env["password"], 
-                                            active_env["auth_url"], 
-                                            active_env["user_domain_name"], 
-                                            active_env["project_id"])
-                            )
+                active_env["auth_url"] = load_env_file()["region"]["{}".format(key)][
+                    "os_auth_url"
+                ]
+                active_env["project_id"] = load_env_file()["region"]["{}".format(key)][
+                    "os_project_id"
+                ]
+                active_env["user_domain_name"] = load_env_file()["region"][
+                    "{}".format(key)
+                ]["os_user_domain_name"]
+                dump_session(
+                    generate_session(
+                        active_env["username"],
+                        active_env["password"],
+                        active_env["auth_url"],
+                        active_env["user_domain_name"],
+                        active_env["project_id"],
+                    )
+                )
                 return active_env
             else:
                 continue
+
 
 def get_project_id(username, password, auth_url, user_domain_name):
     sess = generate_session(
@@ -182,19 +208,18 @@ def do_fresh_login(username=None, auth_url=None):
         project_id = get_project_id(
             username, password, auth_url, GLOBAL_USER_DOMAIN_NAME
         )
-        dump_session(generate_session(
-            auth_url=auth_url,
-            username=username,
-            password=password,
-            project_id=project_id,
-            user_domain_name=GLOBAL_USER_DOMAIN_NAME,
+        dump_session(
+            generate_session(
+                auth_url=auth_url,
+                username=username,
+                password=password,
+                project_id=project_id,
+                user_domain_name=GLOBAL_USER_DOMAIN_NAME,
             )
         )
         # generate fresh neo.env
         # passing username and password to pass toml config
-        create_env_file(
-            username, password, auth_url
-        )
+        create_env_file(username, password, auth_url)
         utils.log_info("Login Success")
     except Exception as e:
         utils.log_err(e)
@@ -204,12 +229,13 @@ def do_fresh_login(username=None, auth_url=None):
 def regenerate_sess():
     """ Regenerate session from old neo.env"""
     env_data = get_active_env()
-    dump_session(generate_session(
-        auth_url=env_data["auth_url"],
-        username=env_data["username"],
-        password=env_data["password"],
-        project_id=env_data["project_id"],
-        user_domain_name=env_data["user_domain_name"],
+    dump_session(
+        generate_session(
+            auth_url=env_data["auth_url"],
+            username=env_data["username"],
+            password=env_data["password"],
+            project_id=env_data["project_id"],
+            user_domain_name=env_data["user_domain_name"],
         )
     )
 
