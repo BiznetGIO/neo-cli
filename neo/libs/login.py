@@ -7,6 +7,9 @@ from keystoneauth1 import session
 from keystoneclient.v3 import client
 from neo.libs import utils
 import toml
+from tempfile import gettempdir
+from shutil import rmtree
+
 
 GLOBAL_HOME = os.path.expanduser("~")
 GLOBAL_AUTH_URL = "https://keystone.wjv-1.neo.id:443/v3"
@@ -280,14 +283,25 @@ def do_login(username=None, region=None):
 def do_logout():
     if check_session():
         home = os.path.expanduser("~")
-        os.remove("/tmp/session.pkl")
+        os.remove("{}/session.pkl".format(tmp_dir()))
+        del_tmp_dir(tmp_dir())
         os.remove(home + "/.neo/config.toml")
         utils.log_info("Logout Success")
 
 
+def tmp_dir():
+    temp = os.path.join(gettempdir(), ".neo")
+    os.makedirs(temp, exist_ok=True)
+    return temp
+
+
+def del_tmp_dir(path):
+    rmtree(path, ignore_errors=True)
+
+
 def dump_session(sess):
     try:
-        with open("/tmp/session.pkl", "wb") as f:
+        with open("{}/session.pkl".format(tmp_dir()), "wb") as f:
             dill.dump(sess, f)
     except:
         utils.log_err("Dump session failed")
@@ -297,7 +311,7 @@ def load_dumped_session():
     try:
         if check_session():
             sess = None
-            with open("/tmp/session.pkl", "rb") as f:
+            with open("{}/session.pkl".format(tmp_dir()), "rb") as f:
                 sess = dill.load(f)
             return sess
         else:
@@ -310,4 +324,4 @@ def load_dumped_session():
 
 
 def check_session():
-    return os.path.isfile("/tmp/session.pkl")
+    return os.path.isfile("{}/session.pkl".format(tmp_dir()))
