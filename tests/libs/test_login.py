@@ -79,12 +79,8 @@ class TestLogin:
     def fake_check_session(self):
         return True
 
-    def fake_create_tmp(self):
-        pass
-
     def test_do_logout(self, monkeypatch, fs):
         monkeypatch.setattr(neo.libs.login, "check_session", self.fake_check_session)
-        monkeypatch.setattr(neo.libs.login, "tmp_dir", self.fake_create_tmp)
 
         home = os.path.expanduser("~")
         tmp_dir = os.path.join(gettempdir(), ".neo")
