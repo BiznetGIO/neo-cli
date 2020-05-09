@@ -101,5 +101,6 @@ class TestLogin:
         assert os.path.exists(home + "/.neo/config.toml") is False
 
     def test_check_session(self, fs):
+        tmp_dir = os.path.join(gettempdir(), ".neo")
         fs.create_file(tmp_dir + "/session.pkl")
         assert login.check_session()
