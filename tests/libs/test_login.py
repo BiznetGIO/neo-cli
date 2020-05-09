@@ -78,21 +78,27 @@ class TestLogin:
     def fake_check_session(self):
         return True
 
+    def fake_create_tmp(self):
+        pass
+
     def test_do_logout(self, monkeypatch, fs):
         monkeypatch.setattr(neo.libs.login, "check_session", self.fake_check_session)
+        monkeypatch.setattr(neo.libs.login, "tmp_dir", self.fake_create_tmp)
 
         home = os.path.expanduser("~")
-        fs.create_file("/tmp/session.pkl")
+        tmp_dir = login.tmp_dir()
+
+        fs.create_file(tmp_dir + "/session.pkl")
         fs.create_file(home + "/.neo/config.toml")
 
-        assert os.path.exists("/tmp/session.pkl")
+        assert os.path.exists(tmp_dir + "/session.pkl")
         assert os.path.exists(home + "/.neo/config.toml")
 
         login.do_logout()
 
-        assert os.path.exists("/tmp/session.pkl") is False
+        assert os.path.exists(tmp_dir + "/session.pkl") is False
         assert os.path.exists(home + "/.neo/config.toml") is False
 
     def test_check_session(self, fs):
-        fs.create_file("/tmp/session.pkl")
+        fs.create_file(tmp_dir + "/session.pkl")
         assert login.check_session()
