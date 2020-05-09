@@ -1,6 +1,7 @@
 import pytest
 import os
 import toml
+from tempfile import gettempdir
 
 import neo.libs.login
 from neo.libs import login
@@ -86,7 +87,7 @@ class TestLogin:
         monkeypatch.setattr(neo.libs.login, "tmp_dir", self.fake_create_tmp)
 
         home = os.path.expanduser("~")
-        tmp_dir = login.tmp_dir()
+        tmp_dir = os.path.join(gettempdir(), ".neo")
 
         fs.create_file(tmp_dir + "/session.pkl")
         fs.create_file(home + "/.neo/config.toml")
