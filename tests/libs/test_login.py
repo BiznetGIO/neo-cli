@@ -10,7 +10,7 @@ from neo.libs import login
 class TestLogin:
     def test_check_env(self, fs):
         home = os.path.expanduser("~")
-        fs.create_file(f"{home}/.neo/config.toml")
+        fs.create_file(os.path.join(home, ".neo", "config.toml"))
         assert login.check_env()
 
     def fake_load_env_file(self):
@@ -72,9 +72,9 @@ class TestLogin:
         monkeypatch.setattr(neo.libs.login, "get_env_values", self.fake_get_env_values)
         assert login.is_current_env("https://foo.id:443/v1", "foo.id", "john")
 
-    # def test_is_current_env_false(self, monkeypatch):
-    #     monkeypatch.setattr(neo.libs.login, "get_env_values", self.fake_get_env_values)
-    #     assert login.is_current_env("https://bar.id:443/v1", "bar.id", "merry") is False
+    def test_is_current_env_false(self, monkeypatch):
+        monkeypatch.setattr(neo.libs.login, "get_env_values", self.fake_get_env_values)
+        assert login.is_current_env("https://bar.id:443/v1", "bar.id", "merry") is None
 
     def fake_check_session(self):
         return True
@@ -86,15 +86,15 @@ class TestLogin:
         tmp_dir = os.path.join(gettempdir(), ".neo")
 
         fs.create_file(tmp_dir + "/session.pkl")
-        fs.create_file(home + "/.neo/config.toml")
+        fs.create_file(os.path.join(home, ".neo", "config.toml"))
 
         assert os.path.exists(tmp_dir + "/session.pkl")
-        assert os.path.exists(home + "/.neo/config.toml")
+        assert os.path.exists(os.path.join(home, ".neo", "config.toml"))
 
         login.do_logout()
 
         assert os.path.exists(tmp_dir + "/session.pkl") is False
-        assert os.path.exists(home + "/.neo/config.toml") is False
+        assert os.path.exists(os.path.join(home, ".neo", "config.toml")) is False
 
     def test_check_session(self, fs):
         tmp_dir = os.path.join(gettempdir(), ".neo")
